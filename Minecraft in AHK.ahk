@@ -255,7 +255,7 @@ isBlock6 := 1
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 SetTimer, GameLoop, 1
-Returnu
+Return
 
 Player:
 MsgBox, 262144,,  Hi its me player
