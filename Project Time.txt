@@ -1,1 +1,1 @@
-The duration between 10:57 am and 2:15 pm is 3 hours and 18 minutes.
+The duration of that session between 10:57 AM and 2:15 PM is 3 hours 18 minutes 2 seconds and 282 ms.

@@ -12,11 +12,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;;;;;;;;;;;;;;;;;;;;;
 
 ; Set the Border dimensions and Block size
-;~ BorderHeight := 1050
-;~ BorderWidth := 1920
+BorderHeight := 1050
+BorderWidth := 1920
 ;testing
-BorderHeight := 300
-BorderWidth := 500
+;~ BorderHeight := 300
+;~ BorderWidth := 500
 BlockWidth := 50
 BlockHeight := 50
 
@@ -193,7 +193,7 @@ Loop, %TotalBlocks%
 {
 x := BlockXCoordinate%A_Index%
 y := BlockYCoordinate%A_Index%
-Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% gBlock , Block.png
+Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% gBlock , stone.png
 GuiControl, Hide, Block%A_Index%
 isBlock%A_Index% := 0
 }
@@ -253,9 +253,39 @@ isBlock7 := 1
 GuiControl, Show, Block6
 isBlock6 := 1
 
+BlocksAtWidthRow3 := BlocksInWidth * 3
+BlocksAtWidthRow4 := BlocksInWidth * 4
+
+Loop, 2
+{
+if (A_Index = 1)
+{
+BlocksAtWidthRow := BlocksAtWidthRow3
+}
+else
+{
+BlocksAtWidthRow := BlocksAtWidthRow4
+}
+Loop, %BlocksInWidth%
+{
+BlocksAtWidthRow++
+b := BlocksAtWidthRow - BlocksInWidth
+if (isBlock%BlocksAtWidthRow% = 1) && (isBlock%b% = 0)
+{
+GuiControl, , Block%BlocksAtWidthRow%, grass.png
+BlockUnder := BlocksAtWidthRow + BlocksInWidth
+GuiControl, , Block%BlockUnder%, dirt.png
+BlockUnder := BlocksAtWidthRow + BlocksInWidth + BlocksInWidth
+GuiControl, , Block%BlockUnder%, dirt.png
+}
+
+}
+
+}
+
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 SetTimer, GameLoop, 1
-Returnu
+Return
 
 Player:
 MsgBox, 262144,,  Hi its me player
