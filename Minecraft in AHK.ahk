@@ -326,7 +326,7 @@ IfMsgBox Yes
 ExitApp
 }
 }
-else if (GetKeyState("Up", "P"))
+else if (GetKeyState("Up", "P")) or (GetKeyState("W", "P"))
 {
 If (!FuncCollision())
 {
@@ -343,7 +343,7 @@ Speed := MaxSpeed
 GuiControl, Move, Player, x%PlayerX% y%PlayerY%
 }
 }
-else if (GetKeyState("Down", "P"))
+else if (GetKeyState("Down", "P")) or (GetKeyState("S", "P"))
 {
 If (!FuncCollision())
 {
@@ -360,7 +360,7 @@ Speed := MaxSpeed
 }
 }
 }
-else if (GetKeyState("Left", "P"))
+else if (GetKeyState("Left", "P")) or (GetKeyState("A", "P"))
 {
 If (!FuncCollision())
 {
@@ -377,7 +377,7 @@ Speed := MaxSpeed
 }
 }
 }
-else if (GetKeyState("Right", "P"))
+else if (GetKeyState("Right", "P")) or (GetKeyState("D", "P"))
 {
 If (!FuncCollision())
 {
@@ -430,6 +430,13 @@ Return
 
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
+
+W::
+S::
+A::
+D::
+Return
+
 ~LButton::
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
@@ -688,7 +695,7 @@ Return
 #If MouseIsOver(WinName)
 
 
-~1::
+1::
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
 if (gameStarted = 0)
@@ -698,7 +705,7 @@ return
 SelectedBlock := "stone"
 Return
 
-~2::
+2::
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
 if (gameStarted = 0)
@@ -708,7 +715,7 @@ return
 SelectedBlock := "dirt"
 Return
 
-~3::
+3::
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
 if (gameStarted = 0)
@@ -720,7 +727,7 @@ Return
 
 #if WinActive("Minecraft AHK") or WinActive("Inventory")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
-~E::
+E::
 #if WinActive("Minecraft AHK") or WinActive("Inventory")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
 if (gameStarted = 0)
@@ -746,7 +753,7 @@ Return
 
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
-~Esc::
+Esc::
 GuiCLose2:
 WinName := "Minecraft AHK"
 GuiInventory := 0
