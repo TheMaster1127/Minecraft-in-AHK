@@ -183,7 +183,7 @@ Gui, Font, s15
 
 
 Gui, Font, s8
-Gui, Add, Picture, x%PlayerX% y%PlayerY% w%PlayerW% h%PlayerH% vPlayer gPlayer, Player.png
+Gui, Add, Picture, x%PlayerX% y%PlayerY% w%PlayerW% h%PlayerH% vPlayer , Player.png
 Gui, Font, s15
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
@@ -195,7 +195,7 @@ Loop, %TotalBlocks%
 {
 x := BlockXCoordinate%A_Index%
 y := BlockYCoordinate%A_Index%
-Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% gBlock , stone.png
+Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% , stone.png
 GuiControl, Hide, Block%A_Index%
 typeOfBlock%A_Index% := "air"
 isBlock%A_Index% := 0
