@@ -8,6 +8,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 #singleinstance force
+#MaxHotkeysPerInterval 99999999999999999999999999999999999
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 CoordMode, Relative
 ;;;;;;;;;;;;;;;;;;;;;
