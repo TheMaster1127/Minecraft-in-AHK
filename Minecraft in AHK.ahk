@@ -407,14 +407,30 @@ else
 ; else
 Speed := 1
 CanPlaceBlocks := 1
+GuiControl, , Player, player.png
 }
 }
 }
 Return
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 #If WinActive(WinName)
+#If MouseIsOver(WinName)
 ~LButton::
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
 if (CanPlaceBlocks = 0)
 {
 return
@@ -441,6 +457,32 @@ BlocksInWidth := BorderWidth // BlockWidth
 BlockNumber := (Row - 1) * BlocksInWidth + Col
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
+
+
+
+
+; Define the coordinates of the rectangle
+x1 := PlayerX - 190
+y1 := PlayerY - 190
+x2 := PlayerX + PlayerW + 190
+y2 := PlayerY + PlayerH + 190
+
+
+
+; Check if the target coordinates are within the rectangle
+if (XCoordinate >= x1 && XCoordinate <= x2 && YCoordinate >= y1 && YCoordinate <= y2)
+{
+
+}
+else
+{
+;MsgBox, The target coordinates are outside the player's rectangle.
+return
+}
+
+
+
+
 
 
 if (typeOfBlock%BlockNumber% != "air")
@@ -480,7 +522,22 @@ return
 Return
 
 
+
+
+
+
+
+
+
+
+
+
+
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
 ~RButton::
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
 if (CanPlaceBlocks = 0)
 {
 return
@@ -494,12 +551,6 @@ if (GuiInventory = 1)
 gosub GuiClose2
 Return
 }
-
-
-
-
-
-
 
 MouseGetPos, xpos, ypos
 XCoordinate := xpos - 5  ; Replace with the desired X coordinate
@@ -535,7 +586,24 @@ else
 
 
 
+; Define the coordinates of the rectangle
+x1 := PlayerX - 190
+y1 := PlayerY - 190
+x2 := PlayerX + PlayerW + 190
+y2 := PlayerY + PlayerH + 190
 
+
+
+; Check if the target coordinates are within the rectangle
+if (XCoordinate >= x1 && XCoordinate <= x2 && YCoordinate >= y1 && YCoordinate <= y2)
+{
+
+}
+else
+{
+;MsgBox, The target coordinates are outside the player's rectangle.
+return
+}
 
 
 
@@ -621,9 +689,12 @@ Return
 #if
 
 #If WinActive(WinName)
+#If MouseIsOver(WinName)
 
 
 ~1::
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
 if (gameStarted = 0)
 {
 return
@@ -632,6 +703,8 @@ SelectedBlock := "stone"
 Return
 
 ~2::
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
 if (gameStarted = 0)
 {
 return
@@ -640,6 +713,8 @@ SelectedBlock := "dirt"
 Return
 
 ~3::
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
 if (gameStarted = 0)
 {
 return
@@ -647,8 +722,11 @@ return
 SelectedBlock := "grass"
 Return
 
-
+#if WinActive("Minecraft AHK") or WinActive("Inventory")
+#If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
 ~E::
+#if WinActive("Minecraft AHK") or WinActive("Inventory")
+#If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
 if (gameStarted = 0)
 {
 return
@@ -671,6 +749,7 @@ WinName := "Inventory"
 Return
 
 #If WinActive(WinName)
+#If MouseIsOver(WinName)
 ~Esc::
 GuiCLose2:
 if (gameStarted = 0)
@@ -794,6 +873,11 @@ return false
 
 }
 
+MouseIsOver(vWinTitle:="", vWinText:="", vExcludeTitle:="", vExcludeText:="")
+{
+	MouseGetPos,,, hWnd
+	return WinExist(vWinTitle (vWinTitle=""?"":" ") "ahk_id " hWnd, vWinText, vExcludeTitle, vExcludeText)
+}
 
 
 !L::
