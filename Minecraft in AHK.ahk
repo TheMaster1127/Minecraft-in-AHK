@@ -441,7 +441,6 @@ return
 }
 if (GuiInventory = 1)
 {
-gosub GuiClose2
 Return
 }
 ;MsgBox, hi
@@ -548,7 +547,6 @@ return
 }
 if (GuiInventory = 1)
 {
-gosub GuiClose2
 Return
 }
 
