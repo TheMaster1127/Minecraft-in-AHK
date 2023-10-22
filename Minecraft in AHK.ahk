@@ -748,10 +748,6 @@ Return
 #If MouseIsOver(WinName)
 ~Esc::
 GuiCLose2:
-if (gameStarted = 0)
-{
-return
-}
 WinName := "Minecraft AHK"
 GuiInventory := 0
 Gui 2: Destroy
