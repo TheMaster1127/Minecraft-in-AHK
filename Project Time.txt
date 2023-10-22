@@ -1,2 +1,3 @@
 The duration of that session between 10:57 AM and 2:15 PM is 3 hours 18 minutes 2 seconds and 282 ms.
 The duration of that session between 10:20 PM and 11:20 PM is 1 hours 0 minutes 1 seconds and 589 ms.
+The duration of that session between 11:55 AM and 3:30 PM is 3 hours 35 minutes 15 seconds and 741 ms.

@@ -9,17 +9,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 #singleinstance force
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+CoordMode, Relative
 ;;;;;;;;;;;;;;;;;;;;;
 
 ; Set the Border dimensions and Block size
 BorderHeight := 1050
 BorderWidth := 1920
 ;testing
-;~ BorderHeight := 300
+;~ BorderHeight := 400
 ;~ BorderWidth := 500
 BlockWidth := 50
 BlockHeight := 50
-
+GroundHeight := 10
 ;~ Random, Ran1, 500, 1050
 ;~ Random, Ran2, 500, 1920
 ;~ Random, Ran3, 20, 150
@@ -30,17 +31,17 @@ BlockHeight := 50
 ;~ BlockWidth := Ran3
 ;~ BlockHeight := Ran4
 
-
+gameStarted := 0
 
 ; Calculate the total number of blocks
 BlocksInHeight := BorderHeight // BlockHeight
 BlocksInWidth := BorderWidth // BlockWidth
 TotalBlocks := BlocksInHeight * BlocksInWidth
 
-Row := 3
-Row4 := 4
-BlocksInWidthRow := BlocksInWidth * Row + 1
-BlocksInWidthRow4 := BlocksInWidth * Row4 + 1
+Row1 := GroundHeight
+Row2 := Row1 + 1
+BlocksInWidthRow3 := BlocksInWidth * Row1 + 1
+BlocksInWidthRow4 := BlocksInWidth * Row2 + 1
 
 RandomBlocksTopLayer := Floor(BlocksInWidth / 2)
 
@@ -49,8 +50,8 @@ RandomBlocksTopLayer := Floor(BlocksInWidth / 2)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 N := BlocksInWidth
-MIN := BlocksInWidthRow
-MAX := BlocksInWidthRow + BlocksInWidth
+MIN := BlocksInWidthRow3
+MAX := BlocksInWidthRow3 + BlocksInWidth
 name = RanTopLayer
 Loop %N%
 {
@@ -142,7 +143,7 @@ OtherLayersYCoordinate%A_Index% := YCoordinate
 
 Loop, %TotalBlocks%
 {
-
+typeOfBlock%A_Index% := "air"
 ; Specify the position number for which you want to find the coordinates
 PositionNumber := A_Index  ; Change this to the desired position number
 num++
@@ -179,12 +180,13 @@ Gui, Color, 61c6dd
 Gui -DPIScale
 ;Gui +AlwaysOnTop
 Gui, Font, s15
-Gui, Add, Text, x10 y10 w130 h30, Health 10
+
 
 Gui, Font, s8
 Gui, Add, Picture, x%PlayerX% y%PlayerY% w%PlayerW% h%PlayerH% vPlayer gPlayer, Player.png
 Gui, Font, s15
-Gui, Show, w%BorderWidth% h%BorderHeight%, Game Colition Idea AHK
+Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
+WinName := "Minecraft AHK"
 
 
 
@@ -195,6 +197,7 @@ x := BlockXCoordinate%A_Index%
 y := BlockYCoordinate%A_Index%
 Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% gBlock , stone.png
 GuiControl, Hide, Block%A_Index%
+typeOfBlock%A_Index% := "air"
 isBlock%A_Index% := 0
 }
 
@@ -220,6 +223,7 @@ BlockNumber := (Row - 1) * BlocksInWidth + Col
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 GuiControl, Show, Block%BlockNumber%
+typeOfBlock%BlockNumber% := "stone"
 isBlock%BlockNumber% := 1
 ;Gui, Add, Button, x%x% y%y% w%BlockWidth% h%BlockHeight% ,
 }
@@ -243,28 +247,36 @@ BlockNumber := (Row - 1) * BlocksInWidth + Col
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 GuiControl, Show, Block%BlockNumber%
+typeOfBlock%BlockNumber% := "stone"
 isBlock%BlockNumber% := 1
 ;Gui, Add, Button, x%x% y%y% w%BlockWidth% h%BlockHeight% ,
 }
+
+GuiControl, , Block8, stone.png
 GuiControl, Show, Block8
 isBlock8 := 1
+typeOfBlock8 := "stone"
+GuiControl, , Block7, stone.png
 GuiControl, Show, Block7
 isBlock7 := 1
+typeOfBlock7 := "stone"
+GuiControl, , Block6, stone.png
 GuiControl, Show, Block6
 isBlock6 := 1
+typeOfBlock6 := "stone"
 
-BlocksAtWidthRow3 := BlocksInWidth * 3
-BlocksAtWidthRow4 := BlocksInWidth * 4
+BlocksAtWidthRow1 := BlocksInWidth * Row1
+BlocksAtWidthRow2 := BlocksInWidth * Row2
 
 Loop, 2
 {
 if (A_Index = 1)
 {
-BlocksAtWidthRow := BlocksAtWidthRow3
+BlocksAtWidthRow := BlocksAtWidthRow1
 }
 else
 {
-BlocksAtWidthRow := BlocksAtWidthRow4
+BlocksAtWidthRow := BlocksAtWidthRow2
 }
 Loop, %BlocksInWidth%
 {
@@ -273,18 +285,27 @@ b := BlocksAtWidthRow - BlocksInWidth
 if (isBlock%BlocksAtWidthRow% = 1) && (isBlock%b% = 0)
 {
 GuiControl, , Block%BlocksAtWidthRow%, grass.png
+typeOfBlock%BlocksAtWidthRow% := "grass"
 BlockUnder := BlocksAtWidthRow + BlocksInWidth
 GuiControl, , Block%BlockUnder%, dirt.png
+typeOfBlock%BlockUnder% := "dirt"
 BlockUnder := BlocksAtWidthRow + BlocksInWidth + BlocksInWidth
 GuiControl, , Block%BlockUnder%, dirt.png
+typeOfBlock%BlockUnder% := "dirt"
 }
 
 }
 
 }
-
+SelectedBlock := ""
+stone := 0
+grass := 0
+dirt := 0
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
+WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
+gameStarted := 1
+CanPlaceBlocks := 1
 Return
 
 Player:
@@ -294,6 +315,7 @@ Return
 Block:
 
 Return
+
 
 
 
@@ -317,6 +339,7 @@ else if (GetKeyState("Up", "P"))
 If (!FuncCollision())
 {
 Last := "U"
+CanPlaceBlocks := 0
 ; Perform actions for pressing the Up arrow key
 PlayerX := PlayerX
 PlayerY := PlayerY - Speed
@@ -333,6 +356,7 @@ else if (GetKeyState("Down", "P"))
 If (!FuncCollision())
 {
 Last := "D"
+CanPlaceBlocks := 0
 ; Perform actions for pressing the Down arrow key
 PlayerX := PlayerX
 PlayerY := PlayerY + Speed
@@ -349,6 +373,7 @@ else if (GetKeyState("Left", "P"))
 If (!FuncCollision())
 {
 Last := "L"
+CanPlaceBlocks := 0
 ; Perform actions for pressing the Left arrow key
 PlayerX := PlayerX - Speed
 PlayerY := PlayerY
@@ -365,6 +390,7 @@ else if (GetKeyState("Right", "P"))
 If (!FuncCollision())
 {
 Last := "R"
+CanPlaceBlocks := 0
 ; Perform actions for pressing the Right arrow key
 PlayerX := PlayerX + Speed
 PlayerY := PlayerY
@@ -380,14 +406,284 @@ else
 {
 ; else
 Speed := 1
+CanPlaceBlocks := 1
 }
 }
 }
 Return
 
 
+#If WinActive(WinName)
+~LButton::
+if (CanPlaceBlocks = 0)
+{
+return
+}
+if (gameStarted = 0)
+{
+return
+}
+if (GuiInventory = 1)
+{
+gosub GuiClose2
+Return
+}
+;MsgBox, hi
+MouseGetPos, xpos, ypos
+XCoordinate := xpos - 5  ; Replace with the desired X coordinate
+YCoordinate := ypos - 30  ; Replace with the desired Y coordinate
+
+Col := (XCoordinate // BlockWidth) + 1
+Row := (YCoordinate // BlockHeight) + 1
+
+BlocksInWidth := BorderWidth // BlockWidth
+
+BlockNumber := (Row - 1) * BlocksInWidth + Col
+
+;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 
+if (typeOfBlock%BlockNumber% != "air")
+{
+if (typeOfBlock%BlockNumber% = "stone")
+{
+stone++
+typeOfBlock%BlockNumber% := "air"
+GuiControl, Hide, Block%BlockNumber%
+isBlock%BlockNumber% := 0
+return
+}
+if (typeOfBlock%BlockNumber% = "grass")
+{
+grass++
+typeOfBlock%BlockNumber% := "air"
+GuiControl, Hide, Block%BlockNumber%
+isBlock%BlockNumber% := 0
+return
+}
+if (typeOfBlock%BlockNumber% = "dirt")
+{
+dirt++
+typeOfBlock%BlockNumber% := "air"
+GuiControl, Hide, Block%BlockNumber%
+isBlock%BlockNumber% := 0
+return
+}
+}
+else
+{
+return
+}
+;GuiControl, , Inventory, Stone: %stone% Dirt: %dirt% Grass Block: %grass%
+
+
+Return
+
+
+~RButton::
+if (CanPlaceBlocks = 0)
+{
+return
+}
+if (gameStarted = 0)
+{
+return
+}
+if (GuiInventory = 1)
+{
+gosub GuiClose2
+Return
+}
+
+
+
+
+
+
+
+MouseGetPos, xpos, ypos
+XCoordinate := xpos - 5  ; Replace with the desired X coordinate
+YCoordinate := ypos - 30  ; Replace with the desired Y coordinate
+
+Col := (XCoordinate // BlockWidth) + 1
+Row := (YCoordinate // BlockHeight) + 1
+
+BlocksInWidth := BorderWidth // BlockWidth
+
+BlockNumber := (Row - 1) * BlocksInWidth + Col
+
+;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
+
+
+; Define the coordinates of the rectangle
+x1 := PlayerX - 50
+y1 := PlayerY - 50
+x2 := PlayerX + PlayerW + 50
+y2 := PlayerY + PlayerH + 50
+
+
+
+; Check if the target coordinates are within the rectangle
+if (XCoordinate >= x1 && XCoordinate <= x2 && YCoordinate >= y1 && YCoordinate <= y2)
+{
+return
+}
+else
+{
+;MsgBox, The target coordinates are outside the player's rectangle.
+}
+
+
+
+
+
+
+
+
+
+;MsgBox, hi
+if (SelectedBlock = "")
+{
+SelectedBlock := typeOfBlock%BlockNumber%
+return
+}
+if (SelectedBlock <= 0)
+{
+return
+}
+
+if (typeOfBlock%BlockNumber% = "air")
+{
+if (SelectedBlock = "stone")
+{
+if (stone <= 0)
+{
+return
+}
+else
+{
+stone--
+GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
+GuiControl, Show, Block%BlockNumber%
+typeOfBlock%BlockNumber% := "stone"
+isBlock%BlockNumber% := 1
+return
+}
+}
+if (SelectedBlock = "grass")
+{
+if (grass <= 0)
+{
+return
+}
+else
+{
+grass--
+GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
+GuiControl, Show, Block%BlockNumber%
+typeOfBlock%BlockNumber% := "grass"
+isBlock%BlockNumber% := 1
+return
+}
+}
+if (SelectedBlock = "dirt")
+{
+if (dirt <= 0)
+{
+return
+}
+else
+{
+dirt--
+GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
+GuiControl, Show, Block%BlockNumber%
+typeOfBlock%BlockNumber% := "dirt"
+isBlock%BlockNumber% := 1
+return
+}
+}
+}
+else
+{
+SelectedBlock := typeOfBlock%BlockNumber%
+return
+}
+
+
+
+
+;GuiControl, , Inventory, Stone: %stone% Dirt: %dirt% Grass Block: %grass%
+;typeOfBlock%BlockNumber% := SelectedBlock
+
+Return
+
+
+#if
+
+#If WinActive(WinName)
+
+
+~1::
+if (gameStarted = 0)
+{
+return
+}
+SelectedBlock := "stone"
+Return
+
+~2::
+if (gameStarted = 0)
+{
+return
+}
+SelectedBlock := "dirt"
+Return
+
+~3::
+if (gameStarted = 0)
+{
+return
+}
+SelectedBlock := "grass"
+Return
+
+
+~E::
+if (gameStarted = 0)
+{
+return
+}
+if (GuiInventory = 1)
+{
+gosub GuiClose2
+Return
+}
+GuiInventory := 1
+Gui 2: new
+Gui 2: Color, 121212
+Gui 2: -DPIScale
+Gui 2: +AlwaysOnTop
+Gui 2: Font, s15
+Gui 2: Add, Text, cWhite x10 y10 w200 h190 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%
+Gui 2: Add, Text, cWhite x10 y250 w650 h200 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nOr Right Click on any block in the world to select it
+Gui 2: Show, w700 h500, Inventory
+WinName := "Inventory"
+Return
+
+#If WinActive(WinName)
+~Esc::
+GuiCLose2:
+if (gameStarted = 0)
+{
+return
+}
+WinName := "Minecraft AHK"
+GuiInventory := 0
+Gui 2: Destroy
+Return
+
+
+#if
 
 
 FuncCollision()
@@ -408,7 +704,13 @@ y3 := PlayerY + PlayerH - 1 ; so the player dsoent seem to float
 x4 := PlayerX + PlayerW
 y4 := PlayerY + PlayerH - 1 ; so the player dsoent seem to float
 
-Loop, 4
+x5 := PlayerX
+y5 := PlayerY + (PlayerH // 2)
+
+x6 := PlayerX + PlayerW
+y6 := PlayerY + (PlayerH // 2)
+
+Loop, 6
 {
 
 XCoordinate := x%A_Index%  ; Replace with the desired X coordinate
@@ -444,7 +746,7 @@ b%A_Index% := Round(isBlock%BlockNumber%)
 
 
 
-if (b1 = 1) or (b2 = 1) or (b3 = 1) or (b4 = 1)
+if (b1 = 1) or (b2 = 1) or (b3 = 1) or (b4 = 1) or (b5 = 1) or (b6 = 1)
 {
 ;MsgBox, %b1% %b2% %b3% %b4%
 Speed := 1
@@ -486,7 +788,6 @@ else
 return false
 }
 
-Return
 
 
 
