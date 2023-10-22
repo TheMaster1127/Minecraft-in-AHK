@@ -304,18 +304,10 @@ dirt := 0
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
+SetTimer, airBlocksFix, 1
 gameStarted := 1
 CanPlaceBlocks := 1
 Return
-
-Player:
-MsgBox, 262144,,  Hi its me player
-Return
-
-Block:
-
-Return
-
 
 
 
@@ -413,6 +405,16 @@ GuiControl, , Player, player.png
 }
 Return
 
+airBlocksFix:
+Loop, %TotalBlocks%
+{
+
+if (typeOfBlock%A_Index% = "air")
+{
+isBlock%A_Index% := 0
+}
+}
+Return
 
 
 
@@ -431,10 +433,6 @@ Return
 ~LButton::
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
-if (CanPlaceBlocks = 0)
-{
-return
-}
 if (gameStarted = 0)
 {
 return
