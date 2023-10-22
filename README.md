@@ -1,4 +1,4 @@
-This project is a Minecraft-inspired game developed in AutoHotkey.
+This project is a Minecraft-inspired game developed in AutoHotkey v1.1.
 
 Work in progress
 
