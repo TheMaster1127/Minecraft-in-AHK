@@ -882,7 +882,11 @@ MouseIsOver(vWinTitle:="", vWinText:="", vExcludeTitle:="", vExcludeText:="")
 
 !L::
 GuiClose:
+MsgBox, 262212, , Are you sure you want exit?
+IfMsgBox Yes
+{
 ExitApp
+}
 Return
 
 
