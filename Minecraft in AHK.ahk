@@ -408,12 +408,34 @@ typeOfBlock%Leaf% := "leaf"
 
 } ; end of main Loop, 3
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 SelectedBlock := ""
+
+availableBlocks := 5
+
 stone := 0
 grass := 0
 dirt := 0
 log := 0
 leaf := 0
+
+availableBlock1 := stone
+availableBlock2 := grass
+availableBlock3 := dirt
+availableBlock4 := log
+availableBlock5 := leaf
+
+availableBlockName1 := "stone"
+availableBlockName2 := "grass"
+availableBlockName3 := "dirt"
+availableBlockName4 := "log"
+availableBlockName5 := "leaf"
+
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
@@ -422,6 +444,21 @@ gameStarted := 1
 CanPlaceBlocks := 1
 Return
 
+funcGetBlockCount()
+{
+global
+stone := availableBlock1
+grass := availableBlock2
+dirt := availableBlock3
+log := availableBlock4
+leaf := availableBlock5
+
+availableBlock1 := stone
+availableBlock2 := grass
+availableBlock3 := dirt
+availableBlock4 := log
+availableBlock5 := leaf
+}
 
 
 GameLoop:
@@ -566,6 +603,13 @@ MouseGetPos, xpos, ypos
 XCoordinate := xpos - 5  ; Replace with the desired X coordinate
 YCoordinate := ypos - 30  ; Replace with the desired Y coordinate
 
+MouseBorder := BlockWidth * BlocksInWidth
+
+if (XCoordinate >= MouseBorder)
+{
+return
+}
+
 Col := (XCoordinate // BlockWidth) + 1
 Row := (YCoordinate // BlockHeight) + 1
 
@@ -576,10 +620,10 @@ BlockNumber := (Row - 1) * BlocksInWidth + Col
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 
-BlockUp := BlockNumber - BlocksInWidth
-BlockDown := BlockNumber + BlocksInWidth
-BlockLeft := BlockNumber - 1
-BlockRight := BlockNumber + 1
+BlockUp := Floor(BlockNumber - BlocksInWidth)
+BlockDown := Floor(BlockNumber + BlocksInWidth)
+BlockLeft := Floor(BlockNumber - 1)
+BlockRight := Floor(BlockNumber + 1)
 ;MsgBox, %BlockNumber%`n%BlockUp% %BlockDown% %BlockLeft% %BlockRight%
 
 if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
@@ -685,46 +729,27 @@ return
 
 if (typeOfBlock%BlockNumber% != "air")
 {
-if (typeOfBlock%BlockNumber% = "stone")
+
+Loop, %availableBlocks%
 {
-stone++
+
+if (typeOfBlock%BlockNumber% = availableBlockName%A_Index%)
+{
+funcGetBlockCount()
+availableBlock%A_Index%++
 typeOfBlock%BlockNumber% := "air"
-GuiControl, Hide, Block%BlockNumber%
+funcGetBlockCount()
 isBlock%BlockNumber% := 0
+funcGetBlockCount()
+GuiControl, Hide, Block%BlockNumber%
 return
 }
-if (typeOfBlock%BlockNumber% = "grass")
-{
-grass++
-typeOfBlock%BlockNumber% := "air"
-GuiControl, Hide, Block%BlockNumber%
-isBlock%BlockNumber% := 0
-return
-}
-if (typeOfBlock%BlockNumber% = "dirt")
-{
-dirt++
-typeOfBlock%BlockNumber% := "air"
-GuiControl, Hide, Block%BlockNumber%
-isBlock%BlockNumber% := 0
-return
-}
-if (typeOfBlock%BlockNumber% = "leaf")
-{
-leaf++
-typeOfBlock%BlockNumber% := "air"
-GuiControl, Hide, Block%BlockNumber%
-isBlock%BlockNumber% := 0
-return
-}
-if (typeOfBlock%BlockNumber% = "log")
-{
-log++
-typeOfBlock%BlockNumber% := "air"
-GuiControl, Hide, Block%BlockNumber%
-isBlock%BlockNumber% := 0
-return
-}
+
+} ; end of loop
+
+
+
+
 }
 else
 {
@@ -769,6 +794,13 @@ MouseGetPos, xpos, ypos
 XCoordinate := xpos - 5  ; Replace with the desired X coordinate
 YCoordinate := ypos - 30  ; Replace with the desired Y coordinate
 
+MouseBorder := BlockWidth * BlocksInWidth
+
+if (XCoordinate >= MouseBorder)
+{
+return
+}
+
 Col := (XCoordinate // BlockWidth) + 1
 Row := (YCoordinate // BlockHeight) + 1
 
@@ -781,10 +813,10 @@ BlockNumber := (Row - 1) * BlocksInWidth + Col
 
 
 
-BlockUp := BlockNumber - BlocksInWidth
-BlockDown := BlockNumber + BlocksInWidth
-BlockLeft := BlockNumber - 1
-BlockRight := BlockNumber + 1
+BlockUp := Floor(BlockNumber - BlocksInWidth)
+BlockDown := Floor(BlockNumber + BlocksInWidth)
+BlockLeft := Floor(BlockNumber - 1)
+BlockRight := Floor(BlockNumber + 1)
 ;MsgBox, %BlockNumber%`n%BlockUp% %BlockDown% %BlockLeft% %BlockRight%
 
 
@@ -912,10 +944,6 @@ return
 
 
 
-
-
-
-
 ;MsgBox, hi
 if (SelectedBlock = "")
 {
@@ -927,88 +955,37 @@ if (SelectedBlock <= 0)
 return
 }
 
+
 if (typeOfBlock%BlockNumber% = "air")
 {
-if (SelectedBlock = "stone")
+funcGetBlockCount()
+Loop, %availableBlocks%
 {
-if (stone <= 0)
+
+
+if (SelectedBlock = availableBlockName%A_Index%)
 {
-return
-}
-else
-{
-stone--
-GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
-GuiControl, Show, Block%BlockNumber%
-typeOfBlock%BlockNumber% := "stone"
-isBlock%BlockNumber% := 1
-return
-}
-}
-if (SelectedBlock = "grass")
-{
-if (grass <= 0)
+if (availableBlock%A_Index% <= 0)
 {
 return
 }
 else
 {
-grass--
+
+availableBlock%A_Index%--
 GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
 GuiControl, Show, Block%BlockNumber%
-typeOfBlock%BlockNumber% := "grass"
+typeOfBlock%BlockNumber% := availableBlockName%A_Index%
 isBlock%BlockNumber% := 1
+funcGetBlockCount()
 return
 }
+
 }
-if (SelectedBlock = "dirt")
-{
-if (dirt <= 0)
-{
-return
-}
-else
-{
-dirt--
-GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
-GuiControl, Show, Block%BlockNumber%
-typeOfBlock%BlockNumber% := "dirt"
-isBlock%BlockNumber% := 1
-return
-}
-}
-if (SelectedBlock = "log")
-{
-if (log <= 0)
-{
-return
-}
-else
-{
-log--
-GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
-GuiControl, Show, Block%BlockNumber%
-typeOfBlock%BlockNumber% := "log"
-isBlock%BlockNumber% := 1
-return
-}
-}
-if (SelectedBlock = "leaf")
-{
-if (leaf <= 0)
-{
-return
-}
-else
-{
-leaf--
-GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
-GuiControl, Show, Block%BlockNumber%
-typeOfBlock%BlockNumber% := "leaf"
-isBlock%BlockNumber% := 1
-return
-}
-}
+
+} ; end of loop
+
+
 }
 else
 {
@@ -1071,6 +1048,7 @@ return
 SelectedBlock := "log"
 Return
 
+
 5::
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
@@ -1080,6 +1058,7 @@ return
 }
 SelectedBlock := "leaf"
 Return
+
 
 #if WinActive("Minecraft AHK") or WinActive("Inventory")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
