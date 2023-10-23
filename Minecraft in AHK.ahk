@@ -363,20 +363,20 @@ Loop, %ranTree%
 {
 if (A_Index = 1)
 {
-GuiControl, , Block%targetBlock%, stone.png
+GuiControl, , Block%targetBlock%, log.png
 GuiControl, Show, Block%targetBlock%
 isBlock%targetBlock% := 1
-typeOfBlock%targetBlock% := "stone"
+typeOfBlock%targetBlock% := "log"
 }
 else
 {
 num++
 LogBlock := targetBlock - (BlocksInWidth * num)
 
-GuiControl, , Block%LogBlock%, stone.png
+GuiControl, , Block%LogBlock%, log.png
 GuiControl, Show, Block%LogBlock%
 isBlock%LogBlock% := 1
-typeOfBlock%LogBlock% := "stone"
+typeOfBlock%LogBlock% := "log"
 
 }
 
@@ -399,10 +399,10 @@ posOfLeaf12 := lastLog - 2
 Loop, 12
 {
 Leaf := posOfLeaf%A_Index%
-GuiControl, , Block%Leaf%, grass.png
+GuiControl, , Block%Leaf%, leaf.png
 GuiControl, Show, Block%Leaf%
 isBlock%Leaf% := 1
-typeOfBlock%Leaf% := "grass"
+typeOfBlock%Leaf% := "leaf"
 }
 
 
@@ -412,6 +412,8 @@ SelectedBlock := ""
 stone := 0
 grass := 0
 dirt := 0
+log := 0
+leaf := 0
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
@@ -580,9 +582,81 @@ BlockLeft := BlockNumber - 1
 BlockRight := BlockNumber + 1
 ;MsgBox, %BlockNumber%`n%BlockUp% %BlockDown% %BlockLeft% %BlockRight%
 
+if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if !(BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if !(BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+
+if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+{
+return
+}
+}
+
+;;;;;;;;;;;;;;
+
+if (BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if !(BlockUp <= 0) && (BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if (!BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1)
+{
+return
+}
+}
+
+
+if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
+{
+if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+{
+return
+}
+}
+
+
+if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
+{
 if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
 {
 return
+}
 }
 
 ; Define the coordinates of the rectangle
@@ -630,6 +704,22 @@ return
 if (typeOfBlock%BlockNumber% = "dirt")
 {
 dirt++
+typeOfBlock%BlockNumber% := "air"
+GuiControl, Hide, Block%BlockNumber%
+isBlock%BlockNumber% := 0
+return
+}
+if (typeOfBlock%BlockNumber% = "leaf")
+{
+leaf++
+typeOfBlock%BlockNumber% := "air"
+GuiControl, Hide, Block%BlockNumber%
+isBlock%BlockNumber% := 0
+return
+}
+if (typeOfBlock%BlockNumber% = "log")
+{
+log++
 typeOfBlock%BlockNumber% := "air"
 GuiControl, Hide, Block%BlockNumber%
 isBlock%BlockNumber% := 0
@@ -697,12 +787,83 @@ BlockLeft := BlockNumber - 1
 BlockRight := BlockNumber + 1
 ;MsgBox, %BlockNumber%`n%BlockUp% %BlockDown% %BlockLeft% %BlockRight%
 
+
+if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if !(BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if !(BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+
+if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+{
+return
+}
+}
+
+;;;;;;;;;;;;;;
+
+if (BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if !(BlockUp <= 0) && (BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+}
+
+if (!BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
+{
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1)
+{
+return
+}
+}
+
+
+if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
+{
+if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+{
+return
+}
+}
+
+
+if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
+{
 if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
 {
 return
 }
-
-
+}
 
 
 
@@ -816,6 +977,38 @@ isBlock%BlockNumber% := 1
 return
 }
 }
+if (SelectedBlock = "log")
+{
+if (log <= 0)
+{
+return
+}
+else
+{
+log--
+GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
+GuiControl, Show, Block%BlockNumber%
+typeOfBlock%BlockNumber% := "log"
+isBlock%BlockNumber% := 1
+return
+}
+}
+if (SelectedBlock = "leaf")
+{
+if (leaf <= 0)
+{
+return
+}
+else
+{
+leaf--
+GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
+GuiControl, Show, Block%BlockNumber%
+typeOfBlock%BlockNumber% := "leaf"
+isBlock%BlockNumber% := 1
+return
+}
+}
 }
 else
 {
@@ -868,6 +1061,26 @@ return
 SelectedBlock := "grass"
 Return
 
+4::
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
+if (gameStarted = 0)
+{
+return
+}
+SelectedBlock := "log"
+Return
+
+5::
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
+if (gameStarted = 0)
+{
+return
+}
+SelectedBlock := "leaf"
+Return
+
 #if WinActive("Minecraft AHK") or WinActive("Inventory")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
 E::
@@ -888,9 +1101,9 @@ Gui 2: Color, 121212
 Gui 2: -DPIScale
 Gui 2: +AlwaysOnTop
 Gui 2: Font, s15
-Gui 2: Add, Text, cWhite x10 y10 w200 h190 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%
-Gui 2: Add, Text, cWhite x10 y250 w650 h200 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nOr Right Click on any block in the world to select it
-Gui 2: Show, w700 h500, Inventory
+Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
+Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
+Gui 2: Show, w800 h600, Inventory
 WinName := "Inventory"
 Return
 
