@@ -12,3 +12,6 @@ Work in progress
 - Added player block range for placement and removal, and fixed some bugs.
 - Fixed some bugs.
 - Fixed some bugs like invisible blocks.
+
+### October 23, 2023
+- Added leaves, logs, and trees, and fixed some bugs. Now you can't interact with a block surrounded by air.
