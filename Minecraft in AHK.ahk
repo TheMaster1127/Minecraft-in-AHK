@@ -12,7 +12,7 @@
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 CoordMode, Relative
 ;;;;;;;;;;;;;;;;;;;;;
-
+StartTime := A_TickCount
 ; Set the Border dimensions and Block size
 BorderHeight := 1050
 BorderWidth := 1920
@@ -201,9 +201,6 @@ GuiControl, Hide, Block%A_Index%
 typeOfBlock%A_Index% := "air"
 isBlock%A_Index% := 0
 }
-
-
-
 
 
 Loop, %RandomBlocksTopLayer%
@@ -442,6 +439,27 @@ SetTimer, GameLoop, 1
 SetTimer, airBlocksFix, 1
 gameStarted := 1
 CanPlaceBlocks := 1
+
+
+ElapsedTime := A_TickCount - StartTime
+
+
+ms := ElapsedTime
+
+; Calculate the components
+hours := Floor(ms / 3600000)
+ms := Mod(ms, 3600000)
+minutes := Floor(ms / 60000)
+ms := Mod(ms, 60000)
+seconds := Floor(ms / 1000)
+milliseconds := Mod(ms, 1000)
+
+; Display the result
+ElapsedTime123 := ""
+ElapsedTime123 .= hours "h " minutes "m " seconds "s " milliseconds "ms"
+
+MsgBox, %ElapsedTime123%
+
 Return
 
 funcGetBlockCount()
@@ -469,7 +487,9 @@ IfWinActive Minecraft AHK
 if (GetKeyState("Escape", "P"))
 {
 ; Exit the script if the Escape key is pressed
+gameStarted := 0
 MsgBox, 260, Pause, Do you wnat to exit the game?`n
+gameStarted := 1
 IfMsgBox Yes
 {
 ;Save()
