@@ -253,18 +253,18 @@ isBlock%BlockNumber% := 1
 ;Gui, Add, Button, x%x% y%y% w%BlockWidth% h%BlockHeight% ,
 }
 
-GuiControl, , Block8, stone.png
-GuiControl, Show, Block8
-isBlock8 := 1
-typeOfBlock8 := "stone"
-GuiControl, , Block7, stone.png
-GuiControl, Show, Block7
-isBlock7 := 1
-typeOfBlock7 := "stone"
-GuiControl, , Block6, stone.png
-GuiControl, Show, Block6
-isBlock6 := 1
-typeOfBlock6 := "stone"
+;~ GuiControl, , Block8, stone.png
+;~ GuiControl, Show, Block8
+;~ isBlock8 := 1
+;~ typeOfBlock8 := "stone"
+;~ GuiControl, , Block7, stone.png
+;~ GuiControl, Show, Block7
+;~ isBlock7 := 1
+;~ typeOfBlock7 := "stone"
+;~ GuiControl, , Block6, stone.png
+;~ GuiControl, Show, Block6
+;~ isBlock6 := 1
+;~ typeOfBlock6 := "stone"
 
 BlocksAtWidthRow1 := BlocksInWidth * Row1
 BlocksAtWidthRow2 := BlocksInWidth * Row2
@@ -464,7 +464,16 @@ BlockNumber := (Row - 1) * BlocksInWidth + Col
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 
+BlockUp := BlockNumber - BlocksInWidth
+BlockDown := BlockNumber + BlocksInWidth
+BlockLeft := BlockNumber - 1
+BlockRight := BlockNumber + 1
+;MsgBox, %BlockNumber%`n%BlockUp% %BlockDown% %BlockLeft% %BlockRight%
 
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
 
 ; Define the coordinates of the rectangle
 x1 := PlayerX - 190
@@ -570,6 +579,23 @@ BlockNumber := (Row - 1) * BlocksInWidth + Col
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 
+
+
+BlockUp := BlockNumber - BlocksInWidth
+BlockDown := BlockNumber + BlocksInWidth
+BlockLeft := BlockNumber - 1
+BlockRight := BlockNumber + 1
+;MsgBox, %BlockNumber%`n%BlockUp% %BlockDown% %BlockLeft% %BlockRight%
+
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+{
+return
+}
+
+
+
+
+
 ; Define the coordinates of the rectangle
 x1 := PlayerX - 50
 y1 := PlayerY - 50
@@ -608,6 +634,12 @@ else
 ;MsgBox, The target coordinates are outside the player's rectangle.
 return
 }
+
+
+
+
+
+
 
 
 
