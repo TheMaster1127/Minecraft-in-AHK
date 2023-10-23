@@ -253,18 +253,7 @@ isBlock%BlockNumber% := 1
 ;Gui, Add, Button, x%x% y%y% w%BlockWidth% h%BlockHeight% ,
 }
 
-;~ GuiControl, , Block8, stone.png
-;~ GuiControl, Show, Block8
-;~ isBlock8 := 1
-;~ typeOfBlock8 := "stone"
-;~ GuiControl, , Block7, stone.png
-;~ GuiControl, Show, Block7
-;~ isBlock7 := 1
-;~ typeOfBlock7 := "stone"
-;~ GuiControl, , Block6, stone.png
-;~ GuiControl, Show, Block6
-;~ isBlock6 := 1
-;~ typeOfBlock6 := "stone"
+
 
 BlocksAtWidthRow1 := BlocksInWidth * Row1
 BlocksAtWidthRow2 := BlocksInWidth * Row2
@@ -297,7 +286,128 @@ typeOfBlock%BlockUnder% := "dirt"
 
 }
 
+} ; end of Loop, 2
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; adding trees
+; Define the total number of blocks
+totalBlocks := BlocksInWidth
+
+; Find the middle point
+middlePoint := Floor(totalBlocks / 2)
+
+; Find the point between the middle and the beginning
+betweenMiddleAndBeginning := Floor(middlePoint / 2)
+
+; Find the point between the middle and the end
+betweenMiddleAndEnd := middlePoint + Floor((totalBlocks - middlePoint) / 2)
+
+; Display the results
+;MsgBox Middle Point: %middlePoint%`nBetween Middle and Beginning: %betweenMiddleAndBeginning%`nBetween Middle and End: %betweenMiddleAndEnd%
+
+
+Loop, 3
+{
+if (A_Index = 1)
+{
+point := betweenMiddleAndBeginning
 }
+if (A_Index = 2)
+{
+point := middlePoint
+}
+if (A_Index = 3)
+{
+point := betweenMiddleAndEnd
+}
+
+numOfIndex := BlocksInHeight
+Loop, %BlocksInHeight%
+{
+targetBlock := numOfIndex * BlocksInWidth + point
+if (isBlock%targetBlock% = 0)
+{
+break
+}
+numOfIndex--
+}
+targetBlock%A_Index% := targetBlock
+
+
+} ; and of Loop, 3
+
+;MsgBox, %targetBlock1% %targetBlock2% %targetBlock3%
+
+
+Loop, 3
+{
+if (A_Index = 1)
+{
+targetBlock := targetBlock%A_Index%
+}
+
+if (A_Index = 2)
+{
+targetBlock := targetBlock%A_Index%
+}
+
+if (A_Index = 3)
+{
+targetBlock := targetBlock%A_Index%
+}
+
+num := 0
+Random, ranTree, 3, 6
+Loop, %ranTree%
+{
+if (A_Index = 1)
+{
+GuiControl, , Block%targetBlock%, stone.png
+GuiControl, Show, Block%targetBlock%
+isBlock%targetBlock% := 1
+typeOfBlock%targetBlock% := "stone"
+}
+else
+{
+num++
+LogBlock := targetBlock - (BlocksInWidth * num)
+
+GuiControl, , Block%LogBlock%, stone.png
+GuiControl, Show, Block%LogBlock%
+isBlock%LogBlock% := 1
+typeOfBlock%LogBlock% := "stone"
+
+}
+
+
+} ; end of Loop, %ranTree%
+
+lastLog := LogBlock
+posOfLeaf1 := lastLog - (BlocksInWidth * 1)
+posOfLeaf2 := lastLog - (BlocksInWidth * 2)
+posOfLeaf3 := posOfLeaf2 - 1
+posOfLeaf4 := posOfLeaf2 + 1
+posOfLeaf5 := posOfLeaf1 - 1
+posOfLeaf6 := posOfLeaf1 - 2
+posOfLeaf7 := posOfLeaf1 + 1
+posOfLeaf8 := posOfLeaf1 + 2
+posOfLeaf9 := lastLog + 1
+posOfLeaf10 := lastLog + 2
+posOfLeaf11 := lastLog - 1
+posOfLeaf12 := lastLog - 2
+Loop, 12
+{
+Leaf := posOfLeaf%A_Index%
+GuiControl, , Block%Leaf%, grass.png
+GuiControl, Show, Block%Leaf%
+isBlock%Leaf% := 1
+typeOfBlock%Leaf% := "grass"
+}
+
+
+} ; end of main Loop, 3
+
 SelectedBlock := ""
 stone := 0
 grass := 0
