@@ -14,4 +14,4 @@ Work in progress
 - Fixed some bugs like invisible blocks.
 
 ### October 23, 2023
-- Added leaves, logs, and trees, and fixed some bugs. Now you can't interact with a block surrounded by air.
+- Added leaves, logs, and trees, and fixed some bugs. Now you can't interact with a block surrounded by other blocks there needs to be at least 1 air block.
