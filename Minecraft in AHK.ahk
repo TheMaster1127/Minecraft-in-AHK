@@ -61,8 +61,8 @@ SoundsFolder := "Assets/Sounds/"
 ;~ Gui 2: Add, Picture, x35 y565 w50 h50, %TexturesFolder%stone_item.png
 ;~ Gui 2: Add, Text, x23 y560 w72 h30 BackGroundTrans Right, 5
 
-Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
-Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
+;~ Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
+;~ Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
 ;~ Gui 2: Show, w700 h700, Inventory
 ;~ return
 
@@ -75,13 +75,28 @@ gameStarted := 0
 BlocksInHeight := BorderHeight // BlockHeight
 BlocksInWidth := BorderWidth // BlockWidth
 TotalBlocks := BlocksInHeight * BlocksInWidth
-MsgBox, % BlocksInHeight
+;MsgBox, % BlocksInHeight
 Row1 := GroundHeight
 Row2 := Row1 + 1
-BlocksInWidthRow3 := BlocksInWidth * Row1
-BlocksInWidthRow4 := BlocksInWidth * Row2
+BlocksInWidthRow3 := BlocksInWidth * Row1 + 1
+BlocksInWidthRow4 := BlocksInWidth * Row2 + 1
 
 RandomBlocksTopLayer := Round(BlocksInWidth / 2)
+
+
+;MsgBox, % BlocksInWidth
+if (BlocksInWidth < 25)
+{
+MsgBox, 262160, ERROR, Your screen resolution in not supported!
+ExitApp
+}
+;MsgBox, % BlocksInHeight
+if (BlocksInHeight < 17)
+{
+MsgBox, 262160, ERROR, Your screen resolution in not supported!
+ExitApp
+}
+
 
 ;MsgBox, BlocksInWidthRow4 : %BlocksInWidthRow4%
 ;MsgBox, RandomBlocksTopLayer: %RandomBlocksTopLayer%
@@ -122,7 +137,6 @@ MsgboxVar .= RanTopLayer%A_Index% " "
 }
 ;MsgBox, %MsgboxVar%
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
 
@@ -184,7 +198,6 @@ Loop, %TotalBlocks%
 typeOfBlock%A_Index% := "air"
 ; Specify the position number for which you want to find the coordinates
 PositionNumber := A_Index  ; Change this to the desired position number
-num++
 ; Calculate the row and column of the specified block
 BlocksInWidth := BorderWidth // BlockWidth
 Row := Ceil(PositionNumber / BlocksInWidth)
@@ -254,7 +267,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
-BlockNumber := Round(BlockNumber)
+
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
@@ -279,7 +292,6 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
-BlockNumber := Round(BlockNumber)
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
@@ -304,6 +316,7 @@ else
 {
 BlocksAtWidthRow := BlocksAtWidthRow2
 }
+
 Loop, %BlocksInWidth%
 {
 BlocksAtWidthRow++
@@ -473,7 +486,7 @@ availableBlockName4 := "log"
 availableBlockName5 := "leaf"
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
-Gui Maximize
+
 WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
 SetTimer, airBlocksFix, 1
