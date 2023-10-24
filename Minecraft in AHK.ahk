@@ -14,7 +14,7 @@ CoordMode, Relative
 ;;;;;;;;;;;;;;;;;;;;;
 StartTime := A_TickCount
 ; Set the Border dimensions and Block size
-BorderHeight := 1050
+BorderHeight := 1000
 BorderWidth := 1920
 ;testing
 ;~ BorderHeight := 400
@@ -38,19 +38,19 @@ SoundsFolder := "Assets/Sounds/"
 
 
 
-Gui 2: new
-Gui 2: Color, 121212
-Gui 2: -DPIScale
-Gui 2: +AlwaysOnTop
-Gui 2: Font, s15, Minecraft
-Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
-Gui 2: Add, Picture, x35 y565 w50 h50, %TexturesFolder%stone_item.png
-Gui 2: Add, Text, x23 y560 w72 h30 BackGroundTrans Right, 5
+;~ Gui 2: new
+;~ Gui 2: Color, 121212
+;~ Gui 2: -DPIScale
+;~ Gui 2: +AlwaysOnTop
+;~ Gui 2: Font, s15, Minecraft
+;~ Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
+;~ Gui 2: Add, Picture, x35 y565 w50 h50, %TexturesFolder%stone_item.png
+;~ Gui 2: Add, Text, x23 y560 w72 h30 BackGroundTrans Right, 5
 
-;~ Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
-;~ Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
-Gui 2: Show, w700 h700, Inventory
-return
+Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
+Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
+;~ Gui 2: Show, w700 h700, Inventory
+;~ return
 
 
 
@@ -209,7 +209,7 @@ Gui, Font, s15
 Gui, Font, s8
 Gui, Add, Picture, x%PlayerX% y%PlayerY% w%PlayerW% h%PlayerH% vPlayer , %TexturesFolder%Player.png
 Gui, Font, s15
-Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
+Gui, Show, x0 y0 w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
 
 
@@ -459,6 +459,7 @@ availableBlockName4 := "log"
 availableBlockName5 := "leaf"
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
+Gui Maximize
 WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
 SetTimer, airBlocksFix, 1
