@@ -14,8 +14,22 @@ CoordMode, Relative
 ;;;;;;;;;;;;;;;;;;;;;
 StartTime := A_TickCount
 ; Set the Border dimensions and Block size
-BorderHeight := 1000
-BorderWidth := 1920
+;~ BorderHeight := 1000
+;~ BorderWidth := 1920
+
+; Retrieve the working area's bounding coordinates
+SysGet, OutputVar, MonitorWorkArea, 1
+; Display the coordinates in a MsgBox
+;MsgBox, Monitor %N% Work Area:`nLeft: %OutputVarLeft%`nTop: %OutputVarTop%`nRight: %OutputVarRight%`nBottom: %OutputVarBottom%
+
+RegRead, captionHeight, HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics, CaptionHeight
+titleHeight := Round(captionHeight * A_ScreenDPI / -twipsPerInch := 1440)
+;MsgBox, 64, Title height, %titleHeight%
+SysGet, captionHeight, 31
+;MsgBox, 64, Caption height, %captionHeight%
+BorderHeight := OutputVarBottom - titleHeight
+BorderWidth := OutputVarRight
+
 ;testing
 ;~ BorderHeight := 400
 ;~ BorderWidth := 500
@@ -61,13 +75,13 @@ gameStarted := 0
 BlocksInHeight := BorderHeight // BlockHeight
 BlocksInWidth := BorderWidth // BlockWidth
 TotalBlocks := BlocksInHeight * BlocksInWidth
-
+MsgBox, % BlocksInHeight
 Row1 := GroundHeight
 Row2 := Row1 + 1
-BlocksInWidthRow3 := BlocksInWidth * Row1 + 1
-BlocksInWidthRow4 := BlocksInWidth * Row2 + 1
+BlocksInWidthRow3 := BlocksInWidth * Row1
+BlocksInWidthRow4 := BlocksInWidth * Row2
 
-RandomBlocksTopLayer := Floor(BlocksInWidth / 2)
+RandomBlocksTopLayer := Round(BlocksInWidth / 2)
 
 ;MsgBox, BlocksInWidthRow4 : %BlocksInWidthRow4%
 ;MsgBox, RandomBlocksTopLayer: %RandomBlocksTopLayer%
@@ -209,7 +223,7 @@ Gui, Font, s15
 Gui, Font, s8
 Gui, Add, Picture, x%PlayerX% y%PlayerY% w%PlayerW% h%PlayerH% vPlayer , %TexturesFolder%Player.png
 Gui, Font, s15
-Gui, Show, x0 y0 w%BorderWidth% h%BorderHeight%, Minecraft AHK
+Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
 
 
@@ -240,7 +254,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
-BlockNumber := Floor(BlockNumber)
+BlockNumber := Round(BlockNumber)
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
@@ -265,7 +279,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
-BlockNumber := Floor(BlockNumber)
+BlockNumber := Round(BlockNumber)
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
