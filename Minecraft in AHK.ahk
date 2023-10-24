@@ -32,6 +32,10 @@ GroundHeight := 10
 ;~ BlockWidth := Ran3
 ;~ BlockHeight := Ran4
 
+TexturesFolder := "Assets/Textures/"
+SoundsFolder := "Assets/Sounds/"
+
+GuiInventory := 0
 gameStarted := 0
 
 ; Calculate the total number of blocks
@@ -184,7 +188,7 @@ Gui, Font, s15
 
 
 Gui, Font, s8
-Gui, Add, Picture, x%PlayerX% y%PlayerY% w%PlayerW% h%PlayerH% vPlayer , Player.png
+Gui, Add, Picture, x%PlayerX% y%PlayerY% w%PlayerW% h%PlayerH% vPlayer , %TexturesFolder%Player.png
 Gui, Font, s15
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
@@ -196,7 +200,7 @@ Loop, %TotalBlocks%
 {
 x := BlockXCoordinate%A_Index%
 y := BlockYCoordinate%A_Index%
-Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% , stone.png
+Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% , %TexturesFolder%stone.png
 GuiControl, Hide, Block%A_Index%
 typeOfBlock%A_Index% := "air"
 isBlock%A_Index% := 0
@@ -217,6 +221,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
+BlockNumber := Floor(BlockNumber)
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
@@ -241,6 +246,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
+BlockNumber := Floor(BlockNumber)
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
@@ -271,13 +277,13 @@ BlocksAtWidthRow++
 b := BlocksAtWidthRow - BlocksInWidth
 if (isBlock%BlocksAtWidthRow% = 1) && (isBlock%b% = 0)
 {
-GuiControl, , Block%BlocksAtWidthRow%, grass.png
+GuiControl, , Block%BlocksAtWidthRow%, %TexturesFolder%grass.png
 typeOfBlock%BlocksAtWidthRow% := "grass"
 BlockUnder := BlocksAtWidthRow + BlocksInWidth
-GuiControl, , Block%BlockUnder%, dirt.png
+GuiControl, , Block%BlockUnder%, %TexturesFolder%dirt.png
 typeOfBlock%BlockUnder% := "dirt"
 BlockUnder := BlocksAtWidthRow + BlocksInWidth + BlocksInWidth
-GuiControl, , Block%BlockUnder%, dirt.png
+GuiControl, , Block%BlockUnder%, %TexturesFolder%dirt.png
 typeOfBlock%BlockUnder% := "dirt"
 }
 
@@ -360,7 +366,7 @@ Loop, %ranTree%
 {
 if (A_Index = 1)
 {
-GuiControl, , Block%targetBlock%, log.png
+GuiControl, , Block%targetBlock%, %TexturesFolder%log.png
 GuiControl, Show, Block%targetBlock%
 isBlock%targetBlock% := 1
 typeOfBlock%targetBlock% := "log"
@@ -370,7 +376,7 @@ else
 num++
 LogBlock := targetBlock - (BlocksInWidth * num)
 
-GuiControl, , Block%LogBlock%, log.png
+GuiControl, , Block%LogBlock%, %TexturesFolder%log.png
 GuiControl, Show, Block%LogBlock%
 isBlock%LogBlock% := 1
 typeOfBlock%LogBlock% := "log"
@@ -396,7 +402,7 @@ posOfLeaf12 := lastLog - 2
 Loop, 12
 {
 Leaf := posOfLeaf%A_Index%
-GuiControl, , Block%Leaf%, leaf.png
+GuiControl, , Block%Leaf%, %TexturesFolder%leaf.png
 GuiControl, Show, Block%Leaf%
 isBlock%Leaf% := 1
 typeOfBlock%Leaf% := "leaf"
@@ -441,24 +447,24 @@ gameStarted := 1
 CanPlaceBlocks := 1
 
 
-ElapsedTime := A_TickCount - StartTime
+;~ ElapsedTime := A_TickCount - StartTime
 
 
-ms := ElapsedTime
+;~ ms := ElapsedTime
 
-; Calculate the components
-hours := Floor(ms / 3600000)
-ms := Mod(ms, 3600000)
-minutes := Floor(ms / 60000)
-ms := Mod(ms, 60000)
-seconds := Floor(ms / 1000)
-milliseconds := Mod(ms, 1000)
+;~ ; Calculate the components
+;~ hours := Floor(ms / 3600000)
+;~ ms := Mod(ms, 3600000)
+;~ minutes := Floor(ms / 60000)
+;~ ms := Mod(ms, 60000)
+;~ seconds := Floor(ms / 1000)
+;~ milliseconds := Mod(ms, 1000)
 
-; Display the result
-ElapsedTime123 := ""
-ElapsedTime123 .= hours "h " minutes "m " seconds "s " milliseconds "ms"
+;~ ; Display the result
+;~ ElapsedTime123 := ""
+;~ ElapsedTime123 .= hours "h " minutes "m " seconds "s " milliseconds "ms"
 
-MsgBox, %ElapsedTime123%
+;~ MsgBox, %ElapsedTime123%
 
 Return
 
@@ -483,6 +489,8 @@ GameLoop:
 Loop, 1
 {
 IfWinActive Minecraft AHK
+{
+IfWinNotExist Inventory
 {
 if (GetKeyState("Escape", "P"))
 {
@@ -569,13 +577,16 @@ else
 ; else
 Speed := 1
 CanPlaceBlocks := 1
-GuiControl, , Player, player.png
+GuiControl, , Player, %TexturesFolder%Player.png
+}
 }
 }
 }
 Return
 
 airBlocksFix:
+TotalBlocks := BlocksInHeight * BlocksInWidth
+
 Loop, %TotalBlocks%
 {
 
@@ -584,6 +595,16 @@ if (typeOfBlock%A_Index% = "air")
 isBlock%A_Index% := 0
 }
 }
+
+FixBugUnderStone := TotalBlocks
+
+Loop, %BlocksInWidth%
+{
+FixBugUnderStone++
+
+isBlock%FixBugUnderStone% := 1
+}
+
 Return
 
 
@@ -636,7 +657,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
-
+BlockNumber := Floor(BlockNumber)
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 
@@ -656,7 +677,7 @@ return
 
 if !(BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockDown% = 0)
 {
 return
 }
@@ -664,7 +685,7 @@ return
 
 if !(BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockLeft% = 0)
 {
 return
 }
@@ -673,7 +694,7 @@ return
 
 if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0)
 {
 return
 }
@@ -683,7 +704,7 @@ return
 
 if (BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockLeft% = 0)
 {
 return
 }
@@ -691,7 +712,7 @@ return
 
 if !(BlockUp <= 0) && (BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockDown% = 0) && (isBlock%BlockLeft% = 0)
 {
 return
 }
@@ -699,7 +720,7 @@ return
 
 if (!BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0) && (isBlock%BlockDown% = 0)
 {
 return
 }
@@ -708,7 +729,7 @@ return
 
 if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
-if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0)
 {
 return
 }
@@ -722,6 +743,7 @@ if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1
 return
 }
 }
+
 
 ; Define the coordinates of the rectangle
 x1 := PlayerX - 190
@@ -790,8 +812,6 @@ Return
 
 
 
-
-
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
 ~RButton::
@@ -827,6 +847,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
+BlockNumber := Floor(BlockNumber)
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
@@ -850,7 +871,7 @@ return
 
 if !(BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockDown% = 0)
 {
 return
 }
@@ -858,7 +879,7 @@ return
 
 if !(BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockLeft% = 0)
 {
 return
 }
@@ -867,7 +888,7 @@ return
 
 if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0)
 {
 return
 }
@@ -877,7 +898,7 @@ return
 
 if (BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockLeft% = 0)
 {
 return
 }
@@ -885,7 +906,7 @@ return
 
 if !(BlockUp <= 0) && (BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockRight% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockDown% = 0) && (isBlock%BlockLeft% = 0)
 {
 return
 }
@@ -893,7 +914,7 @@ return
 
 if (!BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
-if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1)
+if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0) && (isBlock%BlockDown% = 0)
 {
 return
 }
@@ -902,7 +923,7 @@ return
 
 if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
-if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1)
+if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0)
 {
 return
 }
@@ -916,6 +937,7 @@ if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1
 return
 }
 }
+
 
 
 
@@ -993,7 +1015,7 @@ else
 {
 
 availableBlock%A_Index%--
-GuiControl, , Block%BlockNumber%, %SelectedBlock%.png
+GuiControl, , Block%BlockNumber%, %TexturesFolder%%SelectedBlock%.png
 GuiControl, Show, Block%BlockNumber%
 typeOfBlock%BlockNumber% := availableBlockName%A_Index%
 isBlock%BlockNumber% := 1
@@ -1083,33 +1105,33 @@ Return
 #if WinActive("Minecraft AHK") or WinActive("Inventory")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
 E::
-#if WinActive("Minecraft AHK") or WinActive("Inventory")
-#If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
+
 if (gameStarted = 0)
 {
 return
 }
 if (GuiInventory = 1)
 {
-gosub GuiClose2
+gosub 2GuiClose
 Return
 }
+
 GuiInventory := 1
 Gui 2: new
 Gui 2: Color, 121212
 Gui 2: -DPIScale
 Gui 2: +AlwaysOnTop
 Gui 2: Font, s15
-Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
-Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
-Gui 2: Show, w800 h600, Inventory
+Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
+;~ Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
+;~ Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
+Gui 2: Show, w700 h700, Inventory
 WinName := "Inventory"
 Return
 
-#If WinActive(WinName)
-#If MouseIsOver(WinName)
-Esc::
-GuiCLose2:
+#If WinActive("Inventory")
+#If MouseIsOver("Inventory")
+2GuiCLose:
 WinName := "Minecraft AHK"
 GuiInventory := 0
 Gui 2: Destroy
@@ -1155,6 +1177,7 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
+BlockNumber := Floor(BlockNumber)
 BlockNumber := Round(BlockNumber)
 BlockNumber := Abs(BlockNumber)
 b%A_Index% := Round(isBlock%BlockNumber%)

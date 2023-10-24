@@ -7,3 +7,4 @@ The duration of that session between 12:30 PM and 2:00 PM is 1 hours 30 minutes 
 The duration of that session between 3:30 PM and 4:30 PM is 1 hours 0 minutes 47 seconds and 921 ms.
 The duration of that session between 6:45 PM and 7:47 PM is 1 hours 2 minutes 31 seconds and 172 ms.
 The duration of that session between 7:50 PM and 8:00 PM is 0 hours 10 minutes 45 seconds and 331 ms.
+The duration of that session between 11:50 АM and 12:55 PM is 1 hours 5 minutes 14 seconds and 744 ms.
