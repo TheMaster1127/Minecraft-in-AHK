@@ -31,9 +31,28 @@ GroundHeight := 10
 ;~ BorderWidth := Ran2
 ;~ BlockWidth := Ran3
 ;~ BlockHeight := Ran4
-
+DllCall( "AddFontResource", Str,"Assets\Fonts\Minecraft.ttf" )
+SendMessage,  0x1D,,,, ahk_id 0xFFFF
 TexturesFolder := "Assets/Textures/"
 SoundsFolder := "Assets/Sounds/"
+
+
+
+Gui 2: new
+Gui 2: Color, 121212
+Gui 2: -DPIScale
+Gui 2: +AlwaysOnTop
+Gui 2: Font, s15, Minecraft
+Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
+Gui 2: Add, Picture, x35 y565 w50 h50, %TexturesFolder%stone_item.png
+Gui 2: Add, Text, x23 y560 w72 h30 BackGroundTrans Right, 5
+
+;~ Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
+;~ Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
+Gui 2: Show, w700 h700, Inventory
+return
+
+
 
 GuiInventory := 0
 gameStarted := 0
@@ -1123,6 +1142,8 @@ Gui 2: -DPIScale
 Gui 2: +AlwaysOnTop
 Gui 2: Font, s15
 Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
+Gui 2: Add, Picture, x20 y500 w50 h50, %TexturesFolder%stone_item.png
+
 ;~ Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
 ;~ Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
 Gui 2: Show, w700 h700, Inventory
