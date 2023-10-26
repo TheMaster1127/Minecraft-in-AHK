@@ -52,20 +52,6 @@ SoundsFolder := "Assets/Sounds/"
 
 
 
-;~ Gui 2: new
-;~ Gui 2: Color, 121212
-;~ Gui 2: -DPIScale
-;~ Gui 2: +AlwaysOnTop
-;~ Gui 2: Font, s15, Minecraft
-;~ Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
-;~ Gui 2: Add, Picture, x35 y565 w50 h50, %TexturesFolder%stone_item.png
-;~ Gui 2: Add, Text, x23 y560 w72 h30 BackGroundTrans Right, 5
-
-;~ Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
-;~ Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
-;~ Gui 2: Show, w700 h700, Inventory
-;~ return
-
 
 
 GuiInventory := 0
@@ -96,6 +82,8 @@ if (BlocksInHeight < 17)
 MsgBox, 262160, ERROR, Your screen resolution in not supported!
 ExitApp
 }
+
+
 
 
 ;MsgBox, BlocksInWidthRow4 : %BlocksInWidthRow4%
@@ -486,7 +474,6 @@ availableBlockName4 := "log"
 availableBlockName5 := "leaf"
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
-
 WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
 SetTimer, airBlocksFix, 1
@@ -513,6 +500,91 @@ CanPlaceBlocks := 1
 
 ;~ MsgBox, %ElapsedTime123%
 
+
+
+
+Gui 2: new
+Gui 2: Color, 121212
+Gui 2: -DPIScale
+Gui 2: +AlwaysOnTop
+Gui 2: Font, s15, Minecraft
+Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
+
+item1 := "stone"
+item2 := "dirt"
+item3 := "grass"
+item4 := "log"
+item5 := "leaf"
+item6 := "leaf"
+item7 := "leaf"
+item8 := "leaf"
+item9 := "leaf"
+item10 := "leaf"
+item11 := "leaf"
+item12 := "leaf"
+item13 := "leaf"
+item14 := "leaf"
+item15 := "leaf"
+item16 := "leaf"
+item17 := "leaf"
+item18 := "leaf"
+
+
+
+
+
+itemInfo(1)
+diffrence := 73
+numIndex := 0
+numIndex1 := 0
+INVy1 := 565
+INVy2 := 560
+
+Loop, 18
+{
+
+if (numIndex = 0)
+{
+INVx1 := 35
+INVx2 := 23
+}
+else
+{
+if (numIndex <= 8)
+{
+INVx1 := 35 + diffrence * numIndex - (numIndex * 2)
+INVx2 := 23 + diffrence * numIndex - (numIndex * 2)
+}
+else
+{
+if (numIndex1 = 0)
+{
+INVy1 := 480
+INVy2 := 475
+INVx1 := 35
+INVx2 := 23
+}
+else
+{
+INVx1 := 35 + diffrence * numIndex1 - (numIndex1 * 2)
+INVx2 := 23 + diffrence * numIndex1 - (numIndex1 * 2)
+}
+numIndex1++
+
+}
+}
+numIndex++
+item := item%A_Index%
+itemCount := itemCount%A_Index%
+
+Gui 2: Add, Picture, x%INVx1% y%INVy1% w50 h50 vItem%A_Index% gItem, %TexturesFolder%%item%_item.png
+Gui 2: Add, Text, x%INVx2% y%INVy2% w72 h30 BackGroundTrans vItemCount%A_Index%  Right, %itemCount%
+
+}
+
+
+Gui 2: Show, w700 h700, Inventory Minecraft AHK
+Gui 2: Hide
 Return
 
 funcGetBlockCount()
@@ -531,13 +603,75 @@ availableBlock4 := log
 availableBlock5 := leaf
 }
 
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+itemInfo(mode)
+{
+global
+; if mode is 1 we will save item
+; if mode is 2 we will retrive info about the items
+
+
+if (mode = 1)
+{
+itemCount1 := stone
+itemCount2 := dirt
+itemCount3 := grass
+itemCount4 := log
+itemCount5 := leaf
+itemCount6 := 0
+itemCount7 := 0
+itemCount8 := 0
+itemCount9 := 0
+itemCount10 := 0
+itemCount11 := 0
+itemCount12 := 0
+itemCount13 := 0
+itemCount14 := 0
+itemCount15 := 0
+itemCount16 := 0
+itemCount17 := 0
+itemCount18 := 0
+}
+
+
+if (mode = 0)
+{
+itemCount1 := stone
+itemCount2 := dirt
+itemCount3 := grass
+itemCount4 := log
+itemCount5 := leaf
+itemCount6 := 0
+itemCount7 := 0
+itemCount8 := 0
+itemCount9 := 0
+itemCount10 := 0
+itemCount11 := 0
+itemCount12 := 0
+itemCount13 := 0
+itemCount14 := 0
+itemCount15 := 0
+itemCount16 := 0
+itemCount17 := 0
+itemCount18 := 0
+
+}
+
+
+} ; end of func itemInfo(mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 GameLoop:
 Loop, 1
 {
 IfWinActive Minecraft AHK
 {
-IfWinNotExist Inventory
+IfWinNotExist Inventory Minecraft AHK
 {
 if (GetKeyState("Escape", "P"))
 {
@@ -669,10 +803,10 @@ Return
 #If WinActive(WinName)
 #If MouseIsOver(WinName)
 
-W::
-S::
-A::
-D::
+$W::
+$S::
+$A::
+$D::
 Return
 
 ~LButton::
@@ -825,11 +959,14 @@ Loop, %availableBlocks%
 if (typeOfBlock%BlockNumber% = availableBlockName%A_Index%)
 {
 funcGetBlockCount()
+itemInfo(0)
 availableBlock%A_Index%++
 typeOfBlock%BlockNumber% := "air"
 funcGetBlockCount()
+itemInfo(0)
 isBlock%BlockNumber% := 0
 funcGetBlockCount()
+itemInfo(0)
 GuiControl, Hide, Block%BlockNumber%
 return
 }
@@ -1060,13 +1197,15 @@ return
 }
 else
 {
-
+itemInfo(0)
 availableBlock%A_Index%--
+itemInfo(0)
 GuiControl, , Block%BlockNumber%, %TexturesFolder%%SelectedBlock%.png
 GuiControl, Show, Block%BlockNumber%
 typeOfBlock%BlockNumber% := availableBlockName%A_Index%
 isBlock%BlockNumber% := 1
 funcGetBlockCount()
+itemInfo(0)
 return
 }
 
@@ -1149,8 +1288,8 @@ SelectedBlock := "leaf"
 Return
 
 
-#if WinActive("Minecraft AHK") or WinActive("Inventory")
-#If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory")
+#if WinActive("Minecraft AHK") or WinActive("Inventory Minecraft AHK")
+#If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory Minecraft AHK")
 E::
 
 if (gameStarted = 0)
@@ -1162,29 +1301,39 @@ if (GuiInventory = 1)
 gosub 2GuiClose
 Return
 }
+itemInfo(1)
 
+Loop, 18
+{
+itemCount := itemCount%A_Index%
+GuiControl, 2:, ItemCount%A_Index%, %itemCount%
+}
 GuiInventory := 1
-Gui 2: new
-Gui 2: Color, 121212
-Gui 2: -DPIScale
-Gui 2: +AlwaysOnTop
-Gui 2: Font, s15
-Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
-Gui 2: Add, Picture, x20 y500 w50 h50, %TexturesFolder%stone_item.png
+Gui 2: Show
 
-;~ Gui 2: Add, Text, cWhite x10 y10 w200 h290 , Inventory`n`nStone: %stone%`nDirt: %dirt%`nGrass Block: %grass%`nLogs: %log%`nLeaves: %leaf%
-;~ Gui 2: Add, Text, cWhite x10 y350 w650 h300 , To select for placement`n`nStone: press 1`nDirt: press 2`nGrass Block: press 3`nLogs: press 4`nLeaves: press 5`nOr Right Click on any block in the world to select it
-Gui 2: Show, w700 h700, Inventory
-WinName := "Inventory"
+WinName := "Inventory Minecraft AHK"
 Return
 
-#If WinActive("Inventory")
-#If MouseIsOver("Inventory")
+#If WinActive("Inventory Minecraft AHK")
+#If MouseIsOver("Inventory Minecraft AHK")
 2GuiCLose:
 WinName := "Minecraft AHK"
 GuiInventory := 0
-Gui 2: Destroy
+Gui 2: Hide
 Return
+
+Item:
+Run, "Assets\Sounds\Item Selection Sound.ahk"
+Loop, 18
+{
+if (A_GuiControl = "item" . A_Index)
+{
+SelectedBlock := %A_GuiControl%
+
+}
+}
+Return
+
 
 
 #if
@@ -1304,6 +1453,7 @@ MouseIsOver(vWinTitle:="", vWinText:="", vExcludeTitle:="", vExcludeText:="")
 	MouseGetPos,,, hWnd
 	return WinExist(vWinTitle (vWinTitle=""?"":" ") "ahk_id " hWnd, vWinText, vExcludeTitle, vExcludeText)
 }
+
 
 
 !L::

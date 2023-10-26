@@ -1,0 +1,1 @@
+SoundPlay, C:\Users\The_M\OneDrive\Desktop\GitHub Projects\Minecraft-in-AHK\Minecraft-in-AHK\Assets\Sounds\Item Selection Sound.mp3, wait
