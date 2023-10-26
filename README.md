@@ -15,3 +15,6 @@ Work in progress
 
 ### October 23, 2023
 - Added leaves, logs, and trees, and fixed some bugs. Now you can't interact with a block surrounded by other blocks there needs to be at least 1 air block.
+
+### October 25, 2023
+- Added a better inventory, and now you can also select items from the inventory to use. Also, you can just right-click on a block within your range to select it. Also added a sound when selecting a block in the inventory. Also, fixed some bugs.
