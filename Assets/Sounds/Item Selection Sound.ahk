@@ -1,1 +1,2 @@
-SoundPlay, C:\Users\The_M\OneDrive\Desktop\GitHub Projects\Minecraft-in-AHK\Minecraft-in-AHK\Assets\Sounds\Item Selection Sound.mp3, wait
+SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+SoundPlay, Item Selection Sound.mp3, wait
