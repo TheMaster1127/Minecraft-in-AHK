@@ -1323,7 +1323,7 @@ Gui 2: Hide
 Return
 
 Item:
-Run, "Assets\Sounds\Item Selection Sound.ahk"
+Run, "Assets\Sounds\Item Selection Sound.exe"
 Loop, 18
 {
 if (A_GuiControl = "item" . A_Index)
@@ -1464,6 +1464,4 @@ IfMsgBox Yes
 ExitApp
 }
 Return
-
-
 
