@@ -1313,7 +1313,7 @@ Gui 2: Hide
 Return
 
 Item:
-Run, "Assets\Sounds\Item Selection Sound.exe"
+SoundPlay, Assets\Sounds\Item Selection Sound.mp3, wait
 Loop, 23
 {
 if (A_GuiControl = "item" . A_Index)
