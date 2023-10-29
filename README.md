@@ -21,3 +21,4 @@ Work in progress
 
 ### October 29, 2023
 - Now, you craft planks by selecting the log in the inventory and placing it in the crafting box in the inventory. Then you can click on the planks crafted, and you're done. Afterward, you can simply click the planks or any other block for placement in the world.
+- Now, you can aslo craft sticks and a new block the crafing table but the crafting table logic is not implemented yet.
