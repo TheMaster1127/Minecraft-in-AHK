@@ -18,3 +18,6 @@ Work in progress
 
 ### October 25, 2023
 - Added a better inventory, and now you can also select items from the inventory to use. Also, you can just right-click on a block within your range to select it. Also added a sound when selecting a block in the inventory. Also, fixed some bugs.
+
+### October 29, 2023
+- Now, you craft planks by selecting the log in the inventory and placing it in the crafting box in the inventory. Then you can click on the planks crafted, and you're done. Afterward, you can simply click the planks or any other block for placement in the world.
