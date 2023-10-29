@@ -454,7 +454,7 @@ typeOfBlock%Leaf% := "leaf"
 
 SelectedBlock := ""
 
-availableBlocks := 6
+availableBlocks := 8 ; blocks and items but items wont be able to be placed
 
 stone := 0
 grass := 0
@@ -462,6 +462,8 @@ dirt := 0
 log := 0
 leaf := 0
 plank := 0
+stick := 0
+crafting_table := 0
 
 availableBlock1 := stone
 availableBlock2 := grass
@@ -469,6 +471,8 @@ availableBlock3 := dirt
 availableBlock4 := log
 availableBlock5 := leaf
 availableBlock6 := plank
+availableBlock7 := stick
+availableBlock8 := crafting_table
 
 availableBlockName1 := "stone"
 availableBlockName2 := "grass"
@@ -476,6 +480,8 @@ availableBlockName3 := "dirt"
 availableBlockName4 := "log"
 availableBlockName5 := "leaf"
 availableBlockName6 := "plank"
+availableBlockName7 := "stick"
+availableBlockName8 := "crafting_table"
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
@@ -520,8 +526,8 @@ item3 := "dirt"
 item4 := "log"
 item5 := "leaf"
 item6 := "plank"
-item7 := "leaf"
-item8 := "leaf"
+item7 := "stick"
+item8 := "crafting_table"
 item9 := "leaf"
 item10 := "leaf"
 item11 := "leaf"
@@ -630,6 +636,8 @@ dirt := availableBlock3
 log := availableBlock4
 leaf := availableBlock5
 plank := availableBlock6
+stick := availableBlock7
+crafting_table := availableBlock8
 
 availableBlock1 := stone
 availableBlock2 := grass
@@ -637,6 +645,8 @@ availableBlock3 := dirt
 availableBlock4 := log
 availableBlock5 := leaf
 availableBlock6 := plank
+availableBlock7 := stick
+availableBlock8 := crafting_table
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -657,8 +667,8 @@ itemCount3 := dirt
 itemCount4 := log
 itemCount5 := leaf
 itemCount6 := plank
-itemCount7 := 0
-itemCount8 := 0
+itemCount7 := stick
+itemCount8 := crafting_table
 itemCount9 := 0
 itemCount10 := 0
 itemCount11 := 0
@@ -680,8 +690,8 @@ itemCount3 := dirt
 itemCount4 := log
 itemCount5 := leaf
 itemCount6 := plank
-itemCount7 := 0
-itemCount8 := 0
+itemCount7 := stick
+itemCount8 := crafting_table
 itemCount9 := 0
 itemCount10 := 0
 itemCount11 := 0
@@ -1233,6 +1243,17 @@ return
 }
 else
 {
+
+; items cant be placed
+;;;;;;;;;;;;;;;;;;;;;;;; start
+; stick
+if (A_Index = 7) ; cant place stick unless you wnat to go ahead and remove this condition
+{
+return
+}
+; 7 is the num for a stick
+;;;;;;;;;;;;;;;;;;;;;;;; end
+
 itemInfo(0)
 availableBlock%A_Index%--
 itemInfo(0)
@@ -1276,6 +1297,17 @@ Return
 #if WinActive("Minecraft AHK") or WinActive("Inventory Minecraft AHK")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory Minecraft AHK")
 E::
+numOfPosInInventoryCrafingTable := 0
+
+forInInventoryCrafingTablePos1 := 0
+forInInventoryCrafingTablePos2 := 0
+forInInventoryCrafingTablePos3 := 0
+forInInventoryCrafingTablePos4 := 0
+
+forInInventoryCrafingTableName1 := ""
+forInInventoryCrafingTableName2 := ""
+forInInventoryCrafingTableName3 := ""
+forInInventoryCrafingTableName4 := ""
 
 if (gameStarted = 0)
 {
@@ -1328,39 +1360,134 @@ itemInfo(1)
 funcGetBlockCount()
 if (LastNumBlockInventory <= 18)
 {
-weCanPlaceBlockInCraftingInventory := 1
-nameOfItemInInventory := availableBlockName%LastNumBlockInventory%
-
-lastBlockInfoInventoryCraftName := nameOfItemInInventory
-lastBlockInfoInventoryCraftNumber := LastNumBlockInventory
+weCanPlaceBlockInCraftingInventory := 1 ; yeah you know
+lastBlockInfoInventoryCraftName := availableBlockName%LastNumBlockInventory% ; mame of the block we selevted
+lastBlockInfoInventoryCraftNumber := LastNumBlockInventory ; what slot we've clicked
 }
 else
 {
 if (weCanPlaceBlockInCraftingInventory = 1) && (LastNumBlockInventory >= 19)  && (LastNumBlockInventory <= 22)
 {
-weCanPlaceBlockInCraftingInventory := 0
 GuiControl, , Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
-if (lastBlockInfoInventoryCraftName = "log") && (availableBlock4 >= 1)
+
+numOfPosInInventoryCrafingTable++
+
+if (LastNumBlockInventory = 19)
 {
+posInInventoryCrafingTable := 1
+}
+if (LastNumBlockInventory = 20)
+{
+posInInventoryCrafingTable := 2
+}
+if (LastNumBlockInventory = 21)
+{
+posInInventoryCrafingTable := 3
+}
+if (LastNumBlockInventory = 22)
+{
+posInInventoryCrafingTable := 4
+}
+
+if (numOfPosInInventoryCrafingTable = 1)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 2)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 3)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 4)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; crafting recipe
+if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "log") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "log") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "log") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "log") && (availableBlock4 >= 1)
+{
+weCraftedInTheInventory := "planks"
 GuiControl, , Item23, Assets/Textures/plank_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
+else if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (availableBlock6 >= 2) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (availableBlock6 >= 2)
+{
+weCraftedInTheInventory := "sticks"
+GuiControl, , Item23, Assets/Textures/stick_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "plank") && (availableBlock6 >= 4)
+{
+weCraftedInTheInventory := "crafting_table"
+GuiControl, , Item23, Assets/Textures/crafting_table_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else
+{
+weCraftedInTheInventory := ""
+GuiControl, , Item23, %TexturesFolder%inventory_crafting_slot.png
+getBlockFormDoneCraftingInInventory := 0
+}
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 }
 else
 {
 if (getBlockFormDoneCraftingInInventory = 1)
 {
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; get craftet item form here
+if (weCraftedInTheInventory = "planks")
+{
 getBlockFormDoneCraftingInInventory := 0
 funcGetBlockCount()
 itemInfo(1)
-availableBlock6++
-availableBlock6++
-availableBlock6++
-availableBlock6++
-availableBlock4--
+availableBlock6 := availableBlock6 + 4 ; availableBlock6 is planks + 4
+availableBlock4 := availableBlock4 - 1 ; availableBlock4 is log - 1
 itemInfo(1)
 funcGetBlockCount()
 itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "sticks")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock7 := availableBlock7 + 4 ; availableBlock7 is sticks + 4
+availableBlock6 := availableBlock6 - 2 ; availableBlock6 is planks - 2
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "crafting_table")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock8 := availableBlock8 + 1 ; availableBlock8 is crafting_table + 4
+availableBlock6 := availableBlock6 - 4 ; availableBlock6 is planks - 4
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 Loop, 18
 {
 itemCount := itemCount%A_Index%
@@ -1371,6 +1498,19 @@ GuiControl, 2:, Item20, %TexturesFolder%inventory_crafting_slot.png
 GuiControl, 2:, Item21, %TexturesFolder%inventory_crafting_slot.png
 GuiControl, 2:, Item22, %TexturesFolder%inventory_crafting_slot.png
 GuiControl, 2:, Item23, %TexturesFolder%inventory_crafting_slot.png
+
+numOfPosInInventoryCrafingTable := 0
+
+forInInventoryCrafingTablePos1 := 0
+forInInventoryCrafingTablePos2 := 0
+forInInventoryCrafingTablePos3 := 0
+forInInventoryCrafingTablePos4 := 0
+
+forInInventoryCrafingTableName1 := ""
+forInInventoryCrafingTableName2 := ""
+forInInventoryCrafingTableName3 := ""
+forInInventoryCrafingTableName4 := ""
+
 }
 }
 }
