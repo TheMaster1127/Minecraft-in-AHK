@@ -13,3 +13,4 @@ The duration of that session between 9:31 PM and 12:32 AM is 3 hours 1 minutes 5
 The duration of that session between 1:06 PM and 2:22 PM is 1 hours 15 minutes 22 seconds and 422 ms.
 The duration of that session between 4:00 PM and 4:58 PM is 0 hours 57 minutes 52 seconds and 922 ms.
 The duration of that session between 5:17 PM and 7:15 PM is 1 hours 57 minutes 46 seconds and 422 ms.
+The duration of that session between 9:50 AM and 11:28 AM is 1 hours 38 minutes 22 seconds and 682 ms.
