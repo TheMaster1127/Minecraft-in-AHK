@@ -234,7 +234,7 @@ Loop, %TotalBlocks%
 {
 x := BlockXCoordinate%A_Index%
 y := BlockYCoordinate%A_Index%
-Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% , %TexturesFolder%stone.png
+Gui, Add, Picture, x%x% y%y% w%BlockWidth% h%BlockHeight% vBlock%A_Index% ,
 GuiControl, Hide, Block%A_Index%
 typeOfBlock%A_Index% := "air"
 isBlock%A_Index% := 0
@@ -283,6 +283,7 @@ BlockNumber := (Row - 1) * BlocksInWidth + Col
 
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
+GuiControl, , Block%BlockNumber%, %TexturesFolder%stone.png
 GuiControl, Show, Block%BlockNumber%
 typeOfBlock%BlockNumber% := "stone"
 isBlock%BlockNumber% := 1
@@ -453,25 +454,28 @@ typeOfBlock%Leaf% := "leaf"
 
 SelectedBlock := ""
 
-availableBlocks := 5
+availableBlocks := 6
 
 stone := 0
 grass := 0
 dirt := 0
 log := 0
 leaf := 0
+plank := 0
 
 availableBlock1 := stone
 availableBlock2 := grass
 availableBlock3 := dirt
 availableBlock4 := log
 availableBlock5 := leaf
+availableBlock6 := plank
 
 availableBlockName1 := "stone"
 availableBlockName2 := "grass"
 availableBlockName3 := "dirt"
 availableBlockName4 := "log"
 availableBlockName5 := "leaf"
+availableBlockName6 := "plank"
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
@@ -479,7 +483,7 @@ SetTimer, GameLoop, 1
 SetTimer, airBlocksFix, 1
 gameStarted := 1
 CanPlaceBlocks := 1
-
+weCanPlaceBlockInCraftingInventory := 0
 
 ;~ ElapsedTime := A_TickCount - StartTime
 
@@ -511,11 +515,11 @@ Gui 2: Font, s15, Minecraft
 Gui 2: Add, Picture, x0 y0 w700 h656, %TexturesFolder%Inventory.png
 
 item1 := "stone"
-item2 := "dirt"
-item3 := "grass"
+item2 := "grass"
+item3 := "dirt"
 item4 := "log"
 item5 := "leaf"
-item6 := "leaf"
+item6 := "plank"
 item7 := "leaf"
 item8 := "leaf"
 item9 := "leaf"
@@ -581,6 +585,36 @@ Gui 2: Add, Picture, x%INVx1% y%INVy1% w50 h50 vItem%A_Index% gItem, %TexturesFo
 Gui 2: Add, Text, x%INVx2% y%INVy2% w72 h30 BackGroundTrans vItemCount%A_Index%  Right, %itemCount%
 
 }
+num := 18
+xInventoryCraft := 355
+yInventoryCraft := 110
+Loop, 5
+{
+num++
+if (A_Index = 1)
+{
+Gui 2: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 2)
+{
+xInventoryCraft := xInventoryCraft + 69
+Gui 2: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 3)
+{
+yInventoryCraft := yInventoryCraft + 69
+Gui 2: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 4)
+{
+xInventoryCraft := 355
+Gui 2: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 5)
+{
+Gui 2: Add, Picture, cWhite x580 y144 w50 h50 vItem%num% gItem, %TexturesFolder%inventory_crafting_slot.png
+}
+}
 
 
 Gui 2: Show, w700 h700, Inventory Minecraft AHK
@@ -595,12 +629,14 @@ grass := availableBlock2
 dirt := availableBlock3
 log := availableBlock4
 leaf := availableBlock5
+plank := availableBlock6
 
 availableBlock1 := stone
 availableBlock2 := grass
 availableBlock3 := dirt
 availableBlock4 := log
 availableBlock5 := leaf
+availableBlock6 := plank
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -616,11 +652,11 @@ global
 if (mode = 1)
 {
 itemCount1 := stone
-itemCount2 := dirt
-itemCount3 := grass
+itemCount2 := grass
+itemCount3 := dirt
 itemCount4 := log
 itemCount5 := leaf
-itemCount6 := 0
+itemCount6 := plank
 itemCount7 := 0
 itemCount8 := 0
 itemCount9 := 0
@@ -639,11 +675,11 @@ itemCount18 := 0
 if (mode = 0)
 {
 itemCount1 := stone
-itemCount2 := dirt
-itemCount3 := grass
+itemCount2 := grass
+itemCount3 := dirt
 itemCount4 := log
 itemCount5 := leaf
-itemCount6 := 0
+itemCount6 := plank
 itemCount7 := 0
 itemCount8 := 0
 itemCount9 := 0
@@ -1236,57 +1272,6 @@ Return
 #If MouseIsOver(WinName)
 
 
-1::
-#If WinActive(WinName)
-#If MouseIsOver(WinName)
-if (gameStarted = 0)
-{
-return
-}
-SelectedBlock := "stone"
-Return
-
-2::
-#If WinActive(WinName)
-#If MouseIsOver(WinName)
-if (gameStarted = 0)
-{
-return
-}
-SelectedBlock := "dirt"
-Return
-
-3::
-#If WinActive(WinName)
-#If MouseIsOver(WinName)
-if (gameStarted = 0)
-{
-return
-}
-SelectedBlock := "grass"
-Return
-
-4::
-#If WinActive(WinName)
-#If MouseIsOver(WinName)
-if (gameStarted = 0)
-{
-return
-}
-SelectedBlock := "log"
-Return
-
-
-5::
-#If WinActive(WinName)
-#If MouseIsOver(WinName)
-if (gameStarted = 0)
-{
-return
-}
-SelectedBlock := "leaf"
-Return
-
 
 #if WinActive("Minecraft AHK") or WinActive("Inventory Minecraft AHK")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory Minecraft AHK")
@@ -1308,6 +1293,11 @@ Loop, 18
 itemCount := itemCount%A_Index%
 GuiControl, 2:, ItemCount%A_Index%, %itemCount%
 }
+GuiControl, 2:, Item19, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item20, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item21, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item22, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item23, %TexturesFolder%inventory_crafting_slot.png
 GuiInventory := 1
 Gui 2: Show
 
@@ -1324,14 +1314,69 @@ Return
 
 Item:
 Run, "Assets\Sounds\Item Selection Sound.exe"
-Loop, 18
+Loop, 23
 {
 if (A_GuiControl = "item" . A_Index)
 {
 SelectedBlock := %A_GuiControl%
+LastNumBlockInventory := A_Index
+}
+}
 
+
+itemInfo(1)
+funcGetBlockCount()
+if (LastNumBlockInventory <= 18)
+{
+weCanPlaceBlockInCraftingInventory := 1
+nameOfItemInInventory := availableBlockName%LastNumBlockInventory%
+
+lastBlockInfoInventoryCraftName := nameOfItemInInventory
+lastBlockInfoInventoryCraftNumber := LastNumBlockInventory
+}
+else
+{
+if (weCanPlaceBlockInCraftingInventory = 1) && (LastNumBlockInventory >= 19)  && (LastNumBlockInventory <= 22)
+{
+weCanPlaceBlockInCraftingInventory := 0
+GuiControl, , Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
+if (lastBlockInfoInventoryCraftName = "log") && (availableBlock4 >= 1)
+{
+GuiControl, , Item23, Assets/Textures/plank_item.png
+getBlockFormDoneCraftingInInventory := 1
 }
 }
+else
+{
+if (getBlockFormDoneCraftingInInventory = 1)
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock6++
+availableBlock6++
+availableBlock6++
+availableBlock6++
+availableBlock4--
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+Loop, 18
+{
+itemCount := itemCount%A_Index%
+GuiControl, 2:, ItemCount%A_Index%, %itemCount%
+}
+GuiControl, 2:, Item19, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item20, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item21, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item22, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item23, %TexturesFolder%inventory_crafting_slot.png
+}
+}
+}
+
+
+
 Return
 
 
