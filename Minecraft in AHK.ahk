@@ -454,7 +454,7 @@ typeOfBlock%Leaf% := "leaf"
 
 SelectedBlock := ""
 
-availableBlocks := 9 ; blocks and items but items wont be able to be placed
+availableBlocks := 10 ; blocks and items but items wont be able to be placed
 
 stone := 0
 grass := 0
@@ -465,6 +465,7 @@ plank := 0
 stick := 0
 crafting_table := 0
 wooden_pickaxe := 0
+stone_pickaxe := 0
 
 
 availableBlock1 := stone
@@ -476,6 +477,7 @@ availableBlock6 := plank
 availableBlock7 := stick
 availableBlock8 := crafting_table
 availableBlock9 := wooden_pickaxe
+availableBlock10 := stone_pickaxe
 
 availableBlockName1 := "stone"
 availableBlockName2 := "grass"
@@ -486,6 +488,7 @@ availableBlockName6 := "plank"
 availableBlockName7 := "stick"
 availableBlockName8 := "crafting_table"
 availableBlockName9 := "wooden_pickaxe"
+availableBlockName10 := "stone_pickaxe"
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
@@ -535,7 +538,7 @@ item6 := "plank"
 item7 := "stick"
 item8 := "crafting_table"
 item9 := "wooden_pickaxe"
-item10 := "leaf"
+item10 := "stone_pickaxe"
 item11 := "leaf"
 item12 := "leaf"
 item13 := "leaf"
@@ -655,7 +658,7 @@ item6 := "plank"
 item7 := "stick"
 item8 := "crafting_table"
 item9 := "wooden_pickaxe"
-item10 := "leaf"
+item10 := "stone_pickaxe"
 item11 := "leaf"
 item12 := "leaf"
 item13 := "leaf"
@@ -800,6 +803,7 @@ plank := availableBlock6
 stick := availableBlock7
 crafting_table := availableBlock8
 wooden_pickaxe := availableBlock9
+stone_pickaxe := availableBlock10
 
 availableBlock1 := stone
 availableBlock2 := grass
@@ -810,6 +814,7 @@ availableBlock6 := plank
 availableBlock7 := stick
 availableBlock8 := crafting_table
 availableBlock9 := wooden_pickaxe
+availableBlock10 := stone_pickaxe
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -833,7 +838,7 @@ itemCount6 := plank
 itemCount7 := stick
 itemCount8 := crafting_table
 itemCount9 := wooden_pickaxe
-itemCount10 := 0
+itemCount10 := stone_pickaxe
 itemCount11 := 0
 itemCount12 := 0
 itemCount13 := 0
@@ -856,7 +861,7 @@ itemCount6 := plank
 itemCount7 := stick
 itemCount8 := crafting_table
 itemCount9 := wooden_pickaxe
-itemCount10 := 0
+itemCount10 := stone_pickaxe
 itemCount11 := 0
 itemCount12 := 0
 itemCount13 := 0
@@ -1177,7 +1182,9 @@ if (typeOfBlock%BlockNumber% = availableBlockName%A_Index%)
 {
 funcGetBlockCount()
 itemInfo(0)
-if (typeOfBlock%BlockNumber% = availableBlockName1) ; stone
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName1) ; start STONE stone stone stone stone
 {
 if (SelectedBlock = "wooden_pickaxe")
 {
@@ -1188,10 +1195,22 @@ Sleep, 500
 didWeMineTheBlock++
 isPlayerCanMine := 1
 }
+else if (SelectedBlock = "stone_pickaxe")
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_stone.png
+Sleep, 250
+didWeMineTheBlock++
+isPlayerCanMine := 1
+}
 else
 {
 return
 }
+;;;;;;;;;; end of stone stone stone stone
+
+
 }
 else
 {
@@ -1457,6 +1476,13 @@ if (A_Index = 9) ; cant place wooden_pickaxe unless you wnat to go ahead and rem
 return
 }
 ; 9 is the num for a wooden_pickaxe
+
+; stone_pickaxe
+if (A_Index = 10) ; cant place stone_pickaxe unless you wnat to go ahead and remove this condition
+{
+return
+}
+; 10 is the num for a stone_pickaxe
 ;;;;;;;;;;;;;;;;;;;;;;;; end
 
 itemInfo(0)
@@ -1976,7 +2002,7 @@ forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInven
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; crafting recipe
-numOfCrafingRecipes := 4
+numOfCrafingRecipes := 5
 Loop, %numOfCrafingRecipes%
 {
 inventoryCrafingRecipe%A_Index% := 0
@@ -2085,6 +2111,11 @@ if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1)
 {
 inventoryCrafingRecipe4 := 1
 }
+;;;;;;;;;;;;;; 5
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "stone") && (forInInventoryCrafingTableName2 = "stone") && (forInInventoryCrafingTableName3 = "stone") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock1 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe5 := 1
+}
 ;;;;;;;;;;;;;;
 
 
@@ -2113,6 +2144,12 @@ else if (inventoryCrafingRecipe4 = 1)
 {
 weCraftedInTheInventory := "wooden_pickaxe"
 GuiControl, , Item28, Assets/Textures/wooden_pickaxe_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe5 = 1)
+{
+weCraftedInTheInventory := "stone_pickaxe"
+GuiControl, , Item28, Assets/Textures/stone_pickaxe_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else
@@ -2181,6 +2218,20 @@ itemInfo(1)
 availableBlock9 := availableBlock9 + 1 ; availableBlock9 is wooden_pickaxe + 1
 availableBlock7 := availableBlock7 - 2 ; availableBlock7 is sticks - 2
 availableBlock6 := availableBlock6 - 3 ; availableBlock6 is planks - 3
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "stone_pickaxe")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock10 := availableBlock10 + 1 ; availableBlock10 is stone_pickaxe + 1
+availableBlock7 := availableBlock7 - 2 ; availableBlock7 is sticks - 2
+availableBlock1 := availableBlock1 - 3 ; availableBlock1 is stone - 3
 itemInfo(1)
 funcGetBlockCount()
 itemInfo(1)
