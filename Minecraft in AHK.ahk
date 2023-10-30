@@ -328,7 +328,9 @@ typeOfBlock%BlockUnder% := "dirt"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 ; adding trees
+
 ; Define the total number of blocks
 totalBlocks := BlocksInWidth
 
@@ -454,7 +456,7 @@ typeOfBlock%Leaf% := "leaf"
 
 SelectedBlock := ""
 
-availableBlocks := 10 ; blocks and items but items wont be able to be placed
+availableBlocks := 18 ; blocks and items but items wont be able to be placed
 
 stone := 0
 grass := 0
@@ -466,7 +468,14 @@ stick := 0
 crafting_table := 0
 wooden_pickaxe := 0
 stone_pickaxe := 0
-
+iron_pickaxe := 0
+diamond_pickaxe := 0
+wooden_shovel := 0
+wooden_axe := 0
+stone_axe := 0
+iron := 0
+diamond := 0
+diamond_block := 0
 
 availableBlock1 := stone
 availableBlock2 := grass
@@ -478,6 +487,14 @@ availableBlock7 := stick
 availableBlock8 := crafting_table
 availableBlock9 := wooden_pickaxe
 availableBlock10 := stone_pickaxe
+availableBlock11 := iron_pickaxe
+availableBlock12 := diamond_pickaxe
+availableBlock13 := wooden_shovel
+availableBlock14 := wooden_axe
+availableBlock15 := stone_axe
+availableBlock16 := iron
+availableBlock17 := diamond
+availableBlock18 := diamond_block
 
 availableBlockName1 := "stone"
 availableBlockName2 := "grass"
@@ -489,6 +506,15 @@ availableBlockName7 := "stick"
 availableBlockName8 := "crafting_table"
 availableBlockName9 := "wooden_pickaxe"
 availableBlockName10 := "stone_pickaxe"
+availableBlockName11 := "iron_pickaxe"
+availableBlockName12 := "diamond_pickaxe"
+availableBlockName13 := "wooden_shovel"
+availableBlockName14 := "wooden_axe"
+availableBlockName15 := "stone_axe"
+availableBlockName16 := "iron"
+availableBlockName17 := "diamond"
+availableBlockName18 := "diamond_block"
+
 
 Gui, Show, w%BorderWidth% h%BorderHeight%, Minecraft AHK
 WinName := "Minecraft AHK"
@@ -539,14 +565,14 @@ item7 := "stick"
 item8 := "crafting_table"
 item9 := "wooden_pickaxe"
 item10 := "stone_pickaxe"
-item11 := "leaf"
-item12 := "leaf"
-item13 := "leaf"
-item14 := "leaf"
-item15 := "leaf"
-item16 := "leaf"
-item17 := "leaf"
-item18 := "leaf"
+item11 := "iron_pickaxe"
+item12 := "diamond_pickaxe"
+item13 := "wooden_shovel"
+item14 := "wooden_axe"
+item15 := "stone_axe"
+item16 := "iron"
+item17 := "diamond"
+item18 := "diamond_block"
 
 
 
@@ -659,14 +685,14 @@ item7 := "stick"
 item8 := "crafting_table"
 item9 := "wooden_pickaxe"
 item10 := "stone_pickaxe"
-item11 := "leaf"
-item12 := "leaf"
-item13 := "leaf"
-item14 := "leaf"
-item15 := "leaf"
-item16 := "leaf"
-item17 := "leaf"
-item18 := "leaf"
+item11 := "iron_pickaxe"
+item12 := "diamond_pickaxe"
+item13 := "wooden_shovel"
+item14 := "wooden_axe"
+item15 := "stone_axe"
+item16 := "iron"
+item17 := "diamond"
+item18 := "diamond_block"
 
 
 
@@ -786,14 +812,12 @@ Gui 3: Hide
 
 Return
 
-c::
-gosub CrafingTable
-Return
 
 
 funcGetBlockCount()
 {
 global
+
 stone := availableBlock1
 grass := availableBlock2
 dirt := availableBlock3
@@ -804,6 +828,15 @@ stick := availableBlock7
 crafting_table := availableBlock8
 wooden_pickaxe := availableBlock9
 stone_pickaxe := availableBlock10
+iron_pickaxe := availableBlock11
+diamond_pickaxe := availableBlock12
+wooden_shovel := availableBlock13
+wooden_axe := availableBlock14
+stone_axe := availableBlock15
+iron := availableBlock16
+diamond := availableBlock17
+diamond_block := availableBlock18
+
 
 availableBlock1 := stone
 availableBlock2 := grass
@@ -815,8 +848,15 @@ availableBlock7 := stick
 availableBlock8 := crafting_table
 availableBlock9 := wooden_pickaxe
 availableBlock10 := stone_pickaxe
+availableBlock11 := iron_pickaxe
+availableBlock12 := diamond_pickaxe
+availableBlock13 := wooden_shovel
+availableBlock14 := wooden_axe
+availableBlock15 := stone_axe
+availableBlock16 := iron
+availableBlock17 := diamond
+availableBlock18 := diamond_block
 }
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -839,14 +879,14 @@ itemCount7 := stick
 itemCount8 := crafting_table
 itemCount9 := wooden_pickaxe
 itemCount10 := stone_pickaxe
-itemCount11 := 0
-itemCount12 := 0
-itemCount13 := 0
-itemCount14 := 0
-itemCount15 := 0
-itemCount16 := 0
-itemCount17 := 0
-itemCount18 := 0
+itemCount11 := iron_pickaxe
+itemCount12 := diamond_pickaxe
+itemCount13 := wooden_shovel
+itemCount14 := wooden_axe
+itemCount15 := stone_axe
+itemCount16 := iron
+itemCount17 := diamond
+itemCount18 := diamond_block
 }
 
 
@@ -862,14 +902,14 @@ itemCount7 := stick
 itemCount8 := crafting_table
 itemCount9 := wooden_pickaxe
 itemCount10 := stone_pickaxe
-itemCount11 := 0
-itemCount12 := 0
-itemCount13 := 0
-itemCount14 := 0
-itemCount15 := 0
-itemCount16 := 0
-itemCount17 := 0
-itemCount18 := 0
+itemCount11 := iron_pickaxe
+itemCount12 := diamond_pickaxe
+itemCount13 := wooden_shovel
+itemCount14 := wooden_axe
+itemCount15 := stone_axe
+itemCount16 := iron
+itemCount17 := diamond
+itemCount18 := diamond_block
 
 }
 
@@ -2002,7 +2042,7 @@ forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInven
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; crafting recipe
-numOfCrafingRecipes := 5
+numOfCrafingRecipes := 11
 Loop, %numOfCrafingRecipes%
 {
 inventoryCrafingRecipe%A_Index% := 0
