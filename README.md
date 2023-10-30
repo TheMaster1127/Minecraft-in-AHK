@@ -26,3 +26,4 @@ Work in progress
 ### October 30, 2023
 - Added the crafting table functionality.
 - Added a wooden_pickaxe and breaking_stone.png now you can craft a wooden pickaxe and can mine only stone you can no longer get stone unless you have a pickaxe.
+- "Added a stone_pickaxe and its crafting recipe"
