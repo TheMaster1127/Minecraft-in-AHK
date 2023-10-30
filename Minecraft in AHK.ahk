@@ -489,7 +489,8 @@ SetTimer, GameLoop, 1
 SetTimer, airBlocksFix, 1
 gameStarted := 1
 CanPlaceBlocks := 1
-weCanPlaceBlockInCraftingInventory := 0
+inCrafingTable := 0
+
 
 ;~ ElapsedTime := A_TickCount - StartTime
 
@@ -625,7 +626,162 @@ Gui 2: Add, Picture, cWhite x580 y144 w50 h50 vItem%num% gItem, %TexturesFolder%
 
 Gui 2: Show, w700 h700, Inventory Minecraft AHK
 Gui 2: Hide
+
+
+
+; crafing table ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+Gui 3: new
+Gui 3: Color, 121212
+Gui 3: -DPIScale
+Gui 3: +AlwaysOnTop
+Gui 3: Font, s15, Minecraft
+Gui 3: Add, Picture, x0 y0 w700 h656, %TexturesFolder%crafting_tableGUI.png
+
+item1 := "stone"
+item2 := "grass"
+item3 := "dirt"
+item4 := "log"
+item5 := "leaf"
+item6 := "plank"
+item7 := "stick"
+item8 := "crafting_table"
+item9 := "leaf"
+item10 := "leaf"
+item11 := "leaf"
+item12 := "leaf"
+item13 := "leaf"
+item14 := "leaf"
+item15 := "leaf"
+item16 := "leaf"
+item17 := "leaf"
+item18 := "leaf"
+
+
+
+itemInfo(1)
+diffrence := 73
+numIndex := 0
+numIndex1 := 0
+INVy1 := 565
+INVy2 := 560
+
+Loop, 18
+{
+
+if (numIndex = 0)
+{
+INVx1 := 35
+INVx2 := 23
+}
+else
+{
+if (numIndex <= 8)
+{
+INVx1 := 35 + diffrence * numIndex - (numIndex * 2)
+INVx2 := 23 + diffrence * numIndex - (numIndex * 2)
+}
+else
+{
+if (numIndex1 = 0)
+{
+INVy1 := 480
+INVy2 := 475
+INVx1 := 35
+INVx2 := 23
+}
+else
+{
+INVx1 := 35 + diffrence * numIndex1 - (numIndex1 * 2)
+INVx2 := 23 + diffrence * numIndex1 - (numIndex1 * 2)
+}
+numIndex1++
+
+}
+}
+numIndex++
+item := item%A_Index%
+itemCount := itemCount%A_Index%
+
+Gui 3: Add, Picture, x%INVx1% y%INVy1% w50 h50 vItem%A_Index% gCrafingTableItem, %TexturesFolder%%item%_item.png
+Gui 3: Add, Text, x%INVx2% y%INVy2% w72 h30 BackGroundTrans vItemCount%A_Index%  Right, %itemCount%
+
+}
+num := 18
+xInventoryCraft := 128
+yInventoryCraft := 68
+Loop, 10
+{
+num++
+if (A_Index = 1)
+{
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 2)
+{
+xInventoryCraft := xInventoryCraft + 73
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 3)
+{
+xInventoryCraft := xInventoryCraft + 73
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 4)
+{
+xInventoryCraft := 128
+yInventoryCraft := 68
+yInventoryCraft := yInventoryCraft + 73
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 5)
+{
+xInventoryCraft := xInventoryCraft + 73
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 6)
+{
+xInventoryCraft := xInventoryCraft + 73
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 7)
+{
+xInventoryCraft := 128
+yInventoryCraft := 68
+yInventoryCraft := yInventoryCraft + 73 * 2
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 8)
+{
+xInventoryCraft := xInventoryCraft + 73
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 9)
+{
+xInventoryCraft := xInventoryCraft + 73
+Gui 3: Add, Picture, cWhite x%xInventoryCraft% y%yInventoryCraft% w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+if (A_Index = 10)
+{
+Gui 3: Add, Picture, cWhite x500 y144 w50 h50 vItem%num% gCrafingTableItem, %TexturesFolder%inventory_crafting_slot.png
+}
+}
+
+
+Gui 3: Show, w700 h700, Inventory Minecraft AHK
+Gui 3: Hide
+
+
+
 Return
+
+c::
+gosub CrafingTable
+Return
+
 
 funcGetBlockCount()
 {
@@ -1274,7 +1430,13 @@ return
 }
 else
 {
+if (typeOfBlock%BlockNumber% = "crafting_table")
+{
+gosub CrafingTable
+return
+}
 SelectedBlock := typeOfBlock%BlockNumber%
+;MsgBox, % SelectedBlock
 return
 }
 
@@ -1297,7 +1459,14 @@ Return
 #if WinActive("Minecraft AHK") or WinActive("Inventory Minecraft AHK")
 #If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory Minecraft AHK")
 E::
+if (inCrafingTable = 1)
+{
+gosub 3GuiClose
+return
+}
 numOfPosInInventoryCrafingTable := 0
+
+weCanPlaceBlockInCraftingInventory := 0
 
 forInInventoryCrafingTablePos1 := 0
 forInInventoryCrafingTablePos2 := 0
@@ -1411,19 +1580,66 @@ forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInven
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; crafting recipe
-if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "log") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "log") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "log") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "log") && (availableBlock4 >= 1)
+inventoryCrafingRecipe1 := 0
+inventoryCrafingRecipe2 := 0
+inventoryCrafingRecipe3 := 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;; 1
+if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "log") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "log") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "log") && (forInInventoryCrafingTableName4 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "log") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+;;;;;;;;;;; 2
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+
+;;;;;;;;;;;;;;;; 3
+if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "plank") && (availableBlock6 >= 4)
+{
+inventoryCrafingRecipe3 := 1
+}
+;;;;;;;;;;;;;;
+
+
+
+
+;;;;;;;;;;;;;;;;;;; Craft here
+if (inventoryCrafingRecipe1 = 1)
 {
 weCraftedInTheInventory := "planks"
 GuiControl, , Item23, Assets/Textures/plank_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
-else if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (availableBlock6 >= 2) or (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (availableBlock6 >= 2)
+else if (inventoryCrafingRecipe2 = 1)
 {
 weCraftedInTheInventory := "sticks"
 GuiControl, , Item23, Assets/Textures/stick_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
-else if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "plank") && (availableBlock6 >= 4)
+else if (inventoryCrafingRecipe3 = 1)
 {
 weCraftedInTheInventory := "crafting_table"
 GuiControl, , Item23, Assets/Textures/crafting_table_item.png
@@ -1438,7 +1654,7 @@ getBlockFormDoneCraftingInInventory := 0
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; end of checing crafing recipes
 
 
 }
@@ -1522,6 +1738,440 @@ Return
 
 
 #if
+
+
+#If WinActive(WinName)
+#If MouseIsOver(WinName)
+
+
+
+#if WinActive("Minecraft AHK") or WinActive("Inventory Minecraft AHK")
+#If MouseIsOver("Minecraft AHK") or MouseIsOver("Inventory Minecraft AHK")
+CrafingTable:
+inCrafingTable := 1
+numOfPosInInventoryCrafingTable := 0
+
+weCanPlaceBlockInCraftingInventory := 0
+
+forInInventoryCrafingTablePos1 := 0
+forInInventoryCrafingTablePos2 := 0
+forInInventoryCrafingTablePos3 := 0
+forInInventoryCrafingTablePos4 := 0
+forInInventoryCrafingTablePos5 := 0
+forInInventoryCrafingTablePos6 := 0
+forInInventoryCrafingTablePos7 := 0
+forInInventoryCrafingTablePos8 := 0
+forInInventoryCrafingTablePos9 := 0
+
+forInInventoryCrafingTableName1 := ""
+forInInventoryCrafingTableName2 := ""
+forInInventoryCrafingTableName3 := ""
+forInInventoryCrafingTableName4 := ""
+forInInventoryCrafingTableName5 := ""
+forInInventoryCrafingTableName6 := ""
+forInInventoryCrafingTableName7 := ""
+forInInventoryCrafingTableName8 := ""
+forInInventoryCrafingTableName9 := ""
+
+if (gameStarted = 0)
+{
+return
+}
+if (GuiInventory = 1)
+{
+gosub 2GuiClose
+Return
+}
+itemInfo(1)
+
+Loop, 18
+{
+itemCount := itemCount%A_Index%
+GuiControl, 3:, ItemCount%A_Index%, %itemCount%
+}
+GuiControl, 3:, Item19, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item20, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item21, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item22, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item23, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item24, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item25, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item26, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item27, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item28, %TexturesFolder%inventory_crafting_slot.png
+; inventory_crafting_slot
+GuiInventory := 1
+Gui 3: Show
+
+WinName := "Inventory Minecraft AHK"
+Return
+
+#If WinActive("Inventory Minecraft AHK")
+#If MouseIsOver("Inventory Minecraft AHK")
+3GuiCLose:
+WinName := "Minecraft AHK"
+GuiInventory := 0
+inCrafingTable := 0
+Gui 3: Hide
+Return
+
+CrafingTableItem:
+SoundPlay, Assets\Sounds\Item Selection Sound.mp3, wait
+Loop, 28
+{
+if (A_GuiControl = "item" . A_Index)
+{
+SelectedBlock := %A_GuiControl%
+LastNumBlockInventory := A_Index
+}
+}
+
+
+itemInfo(1)
+funcGetBlockCount()
+if (LastNumBlockInventory <= 18)
+{
+weCanPlaceBlockInCraftingInventory := 1 ; yeah you know
+lastBlockInfoInventoryCraftName := availableBlockName%LastNumBlockInventory% ; mame of the block we selevted
+lastBlockInfoInventoryCraftNumber := LastNumBlockInventory ; what slot we've clicked
+}
+else
+{
+if (weCanPlaceBlockInCraftingInventory = 1) && (LastNumBlockInventory >= 19)  && (LastNumBlockInventory <= 27)
+{
+GuiControl, , Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
+
+numOfPosInInventoryCrafingTable++
+
+if (LastNumBlockInventory = 19)
+{
+posInInventoryCrafingTable := 1
+}
+if (LastNumBlockInventory = 20)
+{
+posInInventoryCrafingTable := 2
+}
+if (LastNumBlockInventory = 21)
+{
+posInInventoryCrafingTable := 3
+}
+if (LastNumBlockInventory = 22)
+{
+posInInventoryCrafingTable := 4
+}
+if (LastNumBlockInventory = 23)
+{
+posInInventoryCrafingTable := 5
+}
+if (LastNumBlockInventory = 24)
+{
+posInInventoryCrafingTable := 6
+}
+if (LastNumBlockInventory = 25)
+{
+posInInventoryCrafingTable := 7
+}
+if (LastNumBlockInventory = 26)
+{
+posInInventoryCrafingTable := 8
+}
+if (LastNumBlockInventory = 27)
+{
+posInInventoryCrafingTable := 9
+}
+
+if (numOfPosInInventoryCrafingTable = 1)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 2)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 3)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 4)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 5)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 6)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 7)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 8)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+if (numOfPosInInventoryCrafingTable = 9)
+{
+forInInventoryCrafingTablePos%posInInventoryCrafingTable% := 1
+forInInventoryCrafingTableName%posInInventoryCrafingTable% := lastBlockInfoInventoryCraftName
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; crafting recipe
+inventoryCrafingRecipe1 := 0
+inventoryCrafingRecipe2 := 0
+inventoryCrafingRecipe3 := 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;; 1
+if (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "log") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "log") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "log") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "log") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "log") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "log") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 1) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "log") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "log") && (forInInventoryCrafingTableName9 = "") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+if (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "log") && (availableBlock4 >= 1)
+{
+inventoryCrafingRecipe1 := 1
+}
+
+
+;;;;;;;;;;; 2
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "plank") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 1) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "plank") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "plank") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "plank") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "plank") && (availableBlock6 >= 2)
+{
+inventoryCrafingRecipe2 := 1
+}
+
+
+;;;;;;;;;;;;;;;; 3
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 4)
+{
+inventoryCrafingRecipe3 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "plank") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 4)
+{
+inventoryCrafingRecipe3 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 1) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "plank") && (forInInventoryCrafingTableName8 = "plank") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 4)
+{
+inventoryCrafingRecipe3 := 1
+}
+
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "plank") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "plank") && (forInInventoryCrafingTableName9 = "plank") && (availableBlock6 >= 4)
+{
+inventoryCrafingRecipe3 := 1
+}
+;;;;;;;;;;;;;;
+
+
+
+
+;;;;;;;;;;;;;;;;;;; Craft here
+if (inventoryCrafingRecipe1 = 1)
+{
+weCraftedInTheInventory := "planks"
+GuiControl, , Item28, Assets/Textures/plank_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe2 = 1)
+{
+weCraftedInTheInventory := "sticks"
+GuiControl, , Item28, Assets/Textures/stick_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe3 = 1)
+{
+weCraftedInTheInventory := "crafting_table"
+GuiControl, , Item28, Assets/Textures/crafting_table_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else
+{
+weCraftedInTheInventory := ""
+GuiControl, , Item28, %TexturesFolder%inventory_crafting_slot.png
+getBlockFormDoneCraftingInInventory := 0
+}
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; end of checing crafing recipes
+
+
+}
+else
+{
+if (getBlockFormDoneCraftingInInventory = 1)
+{
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; get craftet item form here
+if (weCraftedInTheInventory = "planks")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock6 := availableBlock6 + 4 ; availableBlock6 is planks + 4
+availableBlock4 := availableBlock4 - 1 ; availableBlock4 is log - 1
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "sticks")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock7 := availableBlock7 + 4 ; availableBlock7 is sticks + 4
+availableBlock6 := availableBlock6 - 2 ; availableBlock6 is planks - 2
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "crafting_table")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock8 := availableBlock8 + 1 ; availableBlock8 is crafting_table + 4
+availableBlock6 := availableBlock6 - 4 ; availableBlock6 is planks - 4
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Loop, 18
+{
+itemCount := itemCount%A_Index%
+GuiControl, 3:, ItemCount%A_Index%, %itemCount%
+}
+GuiControl, 3:, Item19, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item20, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item21, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item22, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item23, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item24, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item25, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item26, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item27, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item28, %TexturesFolder%inventory_crafting_slot.png
+
+numOfPosInInventoryCrafingTable := 0
+
+
+forInInventoryCrafingTablePos1 := 0
+forInInventoryCrafingTablePos2 := 0
+forInInventoryCrafingTablePos3 := 0
+forInInventoryCrafingTablePos4 := 0
+forInInventoryCrafingTablePos5 := 0
+forInInventoryCrafingTablePos6 := 0
+forInInventoryCrafingTablePos7 := 0
+forInInventoryCrafingTablePos8 := 0
+forInInventoryCrafingTablePos9 := 0
+
+forInInventoryCrafingTableName1 := ""
+forInInventoryCrafingTableName2 := ""
+forInInventoryCrafingTableName3 := ""
+forInInventoryCrafingTableName4 := ""
+forInInventoryCrafingTableName5 := ""
+forInInventoryCrafingTableName6 := ""
+forInInventoryCrafingTableName7 := ""
+forInInventoryCrafingTableName8 := ""
+forInInventoryCrafingTableName9 := ""
+
+}
+}
+}
+
+
+
+Return
+
+
+
+
+
+
+
+
+#if
+
+
+
+
 
 
 FuncCollision()
@@ -1640,7 +2290,7 @@ MouseIsOver(vWinTitle:="", vWinText:="", vExcludeTitle:="", vExcludeText:="")
 }
 
 
-
+return
 !L::
 GuiClose:
 MsgBox, 262212, , Are you sure you want exit?
