@@ -2232,6 +2232,7 @@ forInInventoryCrafingTablePos2 := 0
 forInInventoryCrafingTablePos3 := 0
 forInInventoryCrafingTablePos4 := 0
 
+
 forInInventoryCrafingTableName1 := ""
 forInInventoryCrafingTableName2 := ""
 forInInventoryCrafingTableName3 := ""
@@ -2296,7 +2297,27 @@ else
 {
 if (weCanPlaceBlockInCraftingInventory = 1) && (LastNumBlockInventory >= 19)  && (LastNumBlockInventory <= 22)
 {
-GuiControl, , Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
+GuiControl, 2:, Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
+
+
+if (LastNumBlockInventory = 19)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos1
+}
+if (LastNumBlockInventory = 20)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos2
+}
+if (LastNumBlockInventory = 21)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos3
+}
+if (LastNumBlockInventory = 22)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos4
+}
+
+
 
 if (firstTimeLastBugFixInCrafting = 0)
 {
@@ -2310,7 +2331,10 @@ else
 lastBugFixInCrafting := LastNumBlockInventory
 if (lastBugFixInCrafting != oldLastBugFixInCrafting)
 {
+if (checkBugFixCrafingFinal = 0)
+{
 numOfPosInInventoryCrafingTable++
+}
 }
 oldLastBugFixInCrafting := LastNumBlockInventory
 }
@@ -2404,25 +2428,25 @@ inventoryCrafingRecipe3 := 1
 if (inventoryCrafingRecipe1 = 1)
 {
 weCraftedInTheInventory := "planks"
-GuiControl, , Item23, Assets/Textures/plank_item.png
+GuiControl, 2:, Item23, Assets/Textures/plank_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe2 = 1)
 {
 weCraftedInTheInventory := "sticks"
-GuiControl, , Item23, Assets/Textures/stick_item.png
+GuiControl, 2:, Item23, Assets/Textures/stick_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe3 = 1)
 {
 weCraftedInTheInventory := "crafting_table"
-GuiControl, , Item23, Assets/Textures/crafting_table_item.png
+GuiControl, 2:, Item23, Assets/Textures/crafting_table_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else
 {
 weCraftedInTheInventory := ""
-GuiControl, , Item23, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 2:, Item23, %TexturesFolder%inventory_crafting_slot.png
 getBlockFormDoneCraftingInInventory := 0
 }
 
@@ -2610,14 +2634,54 @@ funcGetBlockCount()
 if (LastNumBlockInventory <= 18)
 {
 weCanPlaceBlockInCraftingInventory := 1 ; yeah you know
-lastBlockInfoInventoryCraftName := availableBlockName%LastNumBlockInventory% ; mame of the block we selevted
+lastBlockInfoInventoryCraftName := availableBlockName%LastNumBlockInventory% ; mame of the block we selected
 lastBlockInfoInventoryCraftNumber := LastNumBlockInventory ; what slot we've clicked
 }
 else
 {
 if (weCanPlaceBlockInCraftingInventory = 1) && (LastNumBlockInventory >= 19)  && (LastNumBlockInventory <= 27)
 {
-GuiControl, , Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
+
+GuiControl, 3:, Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
+
+
+if (LastNumBlockInventory = 19)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos1
+}
+if (LastNumBlockInventory = 20)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos2
+}
+if (LastNumBlockInventory = 21)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos3
+}
+if (LastNumBlockInventory = 22)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos4
+}
+if (LastNumBlockInventory = 23)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos5
+}
+if (LastNumBlockInventory = 24)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos6
+}
+if (LastNumBlockInventory = 25)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos7
+}
+if (LastNumBlockInventory = 26)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos8
+}
+if (LastNumBlockInventory = 27)
+{
+checkBugFixCrafingFinal := forInInventoryCrafingTablePos9
+}
+
 
 
 if (firstTimeLastBugFixInCrafting = 0)
@@ -2632,11 +2696,13 @@ else
 lastBugFixInCrafting := LastNumBlockInventory
 if (lastBugFixInCrafting != oldLastBugFixInCrafting)
 {
+if (checkBugFixCrafingFinal = 0)
+{
 numOfPosInInventoryCrafingTable++
+}
 }
 oldLastBugFixInCrafting := LastNumBlockInventory
 }
-
 
 
 if (LastNumBlockInventory = 19)
@@ -2908,73 +2974,73 @@ inventoryCrafingRecipe11 := 1
 if (inventoryCrafingRecipe1 = 1)
 {
 weCraftedInTheInventory := "planks"
-GuiControl, , Item28, Assets/Textures/plank_item.png
+GuiControl, 3:, Item28, Assets/Textures/plank_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe2 = 1)
 {
 weCraftedInTheInventory := "sticks"
-GuiControl, , Item28, Assets/Textures/stick_item.png
+GuiControl, 3:, Item28, Assets/Textures/stick_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe3 = 1)
 {
 weCraftedInTheInventory := "crafting_table"
-GuiControl, , Item28, Assets/Textures/crafting_table_item.png
+GuiControl, 3:, Item28, Assets/Textures/crafting_table_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe4 = 1)
 {
 weCraftedInTheInventory := "wooden_pickaxe"
-GuiControl, , Item28, Assets/Textures/wooden_pickaxe_item.png
+GuiControl, 3:, Item28, Assets/Textures/wooden_pickaxe_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe5 = 1)
 {
 weCraftedInTheInventory := "stone_pickaxe"
-GuiControl, , Item28, Assets/Textures/stone_pickaxe_item.png
+GuiControl, 3:, Item28, Assets/Textures/stone_pickaxe_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe6 = 1)
 {
 weCraftedInTheInventory := "iron_pickaxe"
-GuiControl, , Item28, Assets/Textures/iron_pickaxe_item.png
+GuiControl, 3:, Item28, Assets/Textures/iron_pickaxe_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe7 = 1)
 {
 weCraftedInTheInventory := "diamond_pickaxe"
-GuiControl, , Item28, Assets/Textures/diamond_pickaxe_item.png
+GuiControl, 3:, Item28, Assets/Textures/diamond_pickaxe_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe8 = 1)
 {
 weCraftedInTheInventory := "wooden_shovel"
-GuiControl, , Item28, Assets/Textures/wooden_shovel_item.png
+GuiControl, 3:, Item28, Assets/Textures/wooden_shovel_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe9 = 1)
 {
 weCraftedInTheInventory := "wooden_axe"
-GuiControl, , Item28, Assets/Textures/wooden_axe_item.png
+GuiControl, 3:, Item28, Assets/Textures/wooden_axe_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe10 = 1)
 {
 weCraftedInTheInventory := "stone_axe"
-GuiControl, , Item28, Assets/Textures/stone_axe_item.png
+GuiControl, 3:, Item28, Assets/Textures/stone_axe_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else if (inventoryCrafingRecipe11 = 1)
 {
 weCraftedInTheInventory := "diamond_block"
-GuiControl, , Item28, Assets/Textures/diamond_block_item.png
+GuiControl, 3:, Item28, Assets/Textures/diamond_block_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else
 {
 weCraftedInTheInventory := ""
-GuiControl, , Item28, %TexturesFolder%inventory_crafting_slot.png
+GuiControl, 3:, Item28, %TexturesFolder%inventory_crafting_slot.png
 getBlockFormDoneCraftingInInventory := 0
 }
 
