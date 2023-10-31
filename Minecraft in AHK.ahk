@@ -2222,7 +2222,9 @@ gosub 3GuiClose
 return
 }
 numOfPosInInventoryCrafingTable := 0
-
+lastBugFixInCrafting := 0
+OLDlastBugFixInCrafting := 0
+firstTimeLastBugFixInCrafting := 0
 weCanPlaceBlockInCraftingInventory := 0
 
 forInInventoryCrafingTablePos1 := 0
@@ -2296,7 +2298,22 @@ if (weCanPlaceBlockInCraftingInventory = 1) && (LastNumBlockInventory >= 19)  &&
 {
 GuiControl, , Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
 
+if (firstTimeLastBugFixInCrafting = 0)
+{
+lastBugFixInCrafting := LastNumBlockInventory
 numOfPosInInventoryCrafingTable++
+oldLastBugFixInCrafting := LastNumBlockInventory
+firstTimeLastBugFixInCrafting++
+}
+else
+{
+lastBugFixInCrafting := LastNumBlockInventory
+if (lastBugFixInCrafting != oldLastBugFixInCrafting)
+{
+numOfPosInInventoryCrafingTable++
+}
+oldLastBugFixInCrafting := LastNumBlockInventory
+}
 
 if (LastNumBlockInventory = 19)
 {
@@ -2473,7 +2490,9 @@ GuiControl, 2:, Item22, %TexturesFolder%inventory_crafting_slot.png
 GuiControl, 2:, Item23, %TexturesFolder%inventory_crafting_slot.png
 
 numOfPosInInventoryCrafingTable := 0
-
+lastBugFixInCrafting := 0
+OLDlastBugFixInCrafting := 0
+firstTimeLastBugFixInCrafting := 0
 forInInventoryCrafingTablePos1 := 0
 forInInventoryCrafingTablePos2 := 0
 forInInventoryCrafingTablePos3 := 0
@@ -2507,7 +2526,9 @@ Return
 CrafingTable:
 inCrafingTable := 1
 numOfPosInInventoryCrafingTable := 0
-
+lastBugFixInCrafting := 0
+OLDlastBugFixInCrafting := 0
+firstTimeLastBugFixInCrafting := 0
 weCanPlaceBlockInCraftingInventory := 0
 
 forInInventoryCrafingTablePos1 := 0
@@ -2598,7 +2619,25 @@ if (weCanPlaceBlockInCraftingInventory = 1) && (LastNumBlockInventory >= 19)  &&
 {
 GuiControl, , Item%LastNumBlockInventory%, Assets/Textures/%lastBlockInfoInventoryCraftName%_item.png
 
+
+if (firstTimeLastBugFixInCrafting = 0)
+{
+lastBugFixInCrafting := LastNumBlockInventory
 numOfPosInInventoryCrafingTable++
+oldLastBugFixInCrafting := LastNumBlockInventory
+firstTimeLastBugFixInCrafting++
+}
+else
+{
+lastBugFixInCrafting := LastNumBlockInventory
+if (lastBugFixInCrafting != oldLastBugFixInCrafting)
+{
+numOfPosInInventoryCrafingTable++
+}
+oldLastBugFixInCrafting := LastNumBlockInventory
+}
+
+
 
 if (LastNumBlockInventory = 19)
 {
@@ -3120,7 +3159,9 @@ GuiControl, 3:, Item28, %TexturesFolder%inventory_crafting_slot.png
 
 numOfPosInInventoryCrafingTable := 0
 
-
+lastBugFixInCrafting := 0
+OLDlastBugFixInCrafting := 0
+firstTimeLastBugFixInCrafting := 0
 forInInventoryCrafingTablePos1 := 0
 forInInventoryCrafingTablePos2 := 0
 forInInventoryCrafingTablePos3 := 0
