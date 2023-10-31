@@ -12,7 +12,7 @@
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 CoordMode, Relative
 ;;;;;;;;;;;;;;;;;;;;;
-StartTime := A_TickCount
+
 ; Set the Border dimensions and Block size
 ;~ BorderHeight := 1000
 ;~ BorderWidth := 1920
@@ -448,6 +448,154 @@ typeOfBlock%Leaf% := "leaf"
 
 } ; end of main Loop, 3
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; gen iron and diamonds
+
+
+ironHeight1 := BlocksInHeight - 2
+Random, layerIron1, 10, 15
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+N := BlocksInWidth
+MIN := 1
+MAX := BlocksInWidth
+name = ironPos
+Loop %N%
+{
+  i := A_Index
+  loop
+  {
+    Random R, %MIN%, %MAX%     ; R = random number
+    j := Index_%R%             ; get value from Indexes
+    If j is number
+      If j between 1 and % i - 1
+        If (R_%j% = R)
+          continue             ; repetition found, try again
+    Index_%R% := i             ; store index
+    R_%i% := R                 ; store in R_1, R_2...
+    break                      ; different number
+  }
+}
+nnn := 1
+Loop, %N%
+{
+%name%%nnn% := R_%nnn%
+nnn++
+}
+;MsgBox, %hello1% %hello2% %hello3% %hello4% %hello5% %hello6% %hello7% %hello8% %hello9% %hello10%
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Loop, %layerIron1%
+{
+ironHeight := 1
+ironPos := ironPos%A_Index%
+placeIronLoc := ironHeight%ironHeight% * BlocksInWidth + ironPos - BlocksInWidth
+
+GuiControl, , Block%placeIronLoc%, %TexturesFolder%iron.png
+GuiControl, Show, Block%placeIronLoc%
+isBlock%placeIronLoc% := 1
+typeOfBlock%placeIronLoc% := "iron"
+}
+
+
+
+diamondHeight1 := BlocksInHeight - 1
+diamondHeight2 := BlocksInHeight
+
+
+Random, layerDiamond1, 6, 7
+Random, layerDiamond2, 8, 9
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+N := BlocksInWidth
+MIN := 1
+MAX := BlocksInWidth
+name = diamondPos
+Loop %N%
+{
+  i := A_Index
+  loop
+  {
+    Random R, %MIN%, %MAX%     ; R = random number
+    j := Index_%R%             ; get value from Indexes
+    If j is number
+      If j between 1 and % i - 1
+        If (R_%j% = R)
+          continue             ; repetition found, try again
+    Index_%R% := i             ; store index
+    R_%i% := R                 ; store in R_1, R_2...
+    break                      ; different number
+  }
+}
+nnn := 1
+Loop, %N%
+{
+%name%%nnn% := R_%nnn%
+nnn++
+}
+;MsgBox, %hello1% %hello2% %hello3% %hello4% %hello5% %hello6% %hello7% %hello8% %hello9% %hello10%
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+num := layerDiamond1
+Loop, %layerDiamond1%
+{
+diamondHight := 1
+diamondPos := diamondPos%num%
+num--
+placeDiamondLoc := diamondHeight%diamondHight% * BlocksInWidth + diamondPos - BlocksInWidth
+
+GuiControl, , Block%placeDiamondLoc%, %TexturesFolder%diamond.png
+GuiControl, Show, Block%placeDiamondLoc%
+isBlock%placeDiamondLoc% := 1
+typeOfBlock%placeDiamondLoc% := "diamond"
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+N := BlocksInWidth
+MIN := 1
+MAX := BlocksInWidth
+name = diamondPos
+Loop %N%
+{
+  i := A_Index
+  loop
+  {
+    Random R, %MIN%, %MAX%     ; R = random number
+    j := Index_%R%             ; get value from Indexes
+    If j is number
+      If j between 1 and % i - 1
+        If (R_%j% = R)
+          continue             ; repetition found, try again
+    Index_%R% := i             ; store index
+    R_%i% := R                 ; store in R_1, R_2...
+    break                      ; different number
+  }
+}
+nnn := 1
+Loop, %N%
+{
+%name%%nnn% := R_%nnn%
+nnn++
+}
+;MsgBox, %hello1% %hello2% %hello3% %hello4% %hello5% %hello6% %hello7% %hello8% %hello9% %hello10%
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+num := layerDiamond2
+Loop, %layerDiamond2%
+{
+diamondHight := 2
+diamondPos := diamondPos%num%
+num--
+placeDiamondLoc := diamondHeight%diamondHight% * BlocksInWidth + diamondPos - BlocksInWidth
+
+GuiControl, , Block%placeDiamondLoc%, %TexturesFolder%diamond.png
+GuiControl, Show, Block%placeDiamondLoc%
+isBlock%placeDiamondLoc% := 1
+typeOfBlock%placeDiamondLoc% := "diamond"
+}
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -521,29 +669,15 @@ WinName := "Minecraft AHK"
 SetTimer, GameLoop, 1
 SetTimer, airBlocksFix, 1
 gameStarted := 1
+startTimerOnce := 0
+YouWin := 0
+youCanOnlyWinOnce := 0
 isPlayerCanMine := 1
 CanPlaceBlocks := 1
 inCrafingTable := 0
 
 
-;~ ElapsedTime := A_TickCount - StartTime
 
-
-;~ ms := ElapsedTime
-
-;~ ; Calculate the components
-;~ hours := Floor(ms / 3600000)
-;~ ms := Mod(ms, 3600000)
-;~ minutes := Floor(ms / 60000)
-;~ ms := Mod(ms, 60000)
-;~ seconds := Floor(ms / 1000)
-;~ milliseconds := Mod(ms, 1000)
-
-;~ ; Display the result
-;~ ElapsedTime123 := ""
-;~ ElapsedTime123 .= hours "h " minutes "m " seconds "s " milliseconds "ms"
-
-;~ MsgBox, %ElapsedTime123%
 
 
 
@@ -657,7 +791,7 @@ Gui 2: Add, Picture, cWhite x580 y144 w50 h50 vItem%num% gItem, %TexturesFolder%
 }
 }
 
-
+Gui 2: Add, Text, cWhite x10 y665 w650 h35 vTimerRunningInInventory, Time:
 Gui 2: Show, w700 h700, Inventory Minecraft AHK
 Gui 2: Hide
 
@@ -804,7 +938,7 @@ Gui 3: Add, Picture, cWhite x500 y144 w50 h50 vItem%num% gCrafingTableItem, %Tex
 }
 }
 
-
+Gui 3: Add, Text, cWhite x10 y665 w650 h35 vTimerRunningInCraftingTable, Time:
 Gui 3: Show, w700 h700, Inventory Minecraft AHK
 Gui 3: Hide
 
@@ -921,6 +1055,8 @@ itemCount18 := diamond_block
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 GameLoop:
+if (gameStarted = 1)
+{
 Loop, 1
 {
 IfWinActive Minecraft AHK
@@ -943,6 +1079,11 @@ else if (GetKeyState("Up", "P")) or (GetKeyState("W", "P"))
 {
 If (!FuncCollision())
 {
+startTimerOnce++
+if (startTimerOnce = 1)
+{
+StartTime := A_TickCount
+}
 Last := "U"
 CanPlaceBlocks := 0
 ; Perform actions for pressing the Up arrow key
@@ -960,6 +1101,11 @@ else if (GetKeyState("Down", "P")) or (GetKeyState("S", "P"))
 {
 If (!FuncCollision())
 {
+startTimerOnce++
+if (startTimerOnce = 1)
+{
+StartTime := A_TickCount
+}
 Last := "D"
 CanPlaceBlocks := 0
 ; Perform actions for pressing the Down arrow key
@@ -977,6 +1123,11 @@ else if (GetKeyState("Left", "P")) or (GetKeyState("A", "P"))
 {
 If (!FuncCollision())
 {
+startTimerOnce++
+if (startTimerOnce = 1)
+{
+StartTime := A_TickCount
+}
 Last := "L"
 CanPlaceBlocks := 0
 ; Perform actions for pressing the Left arrow key
@@ -994,6 +1145,11 @@ else if (GetKeyState("Right", "P")) or (GetKeyState("D", "P"))
 {
 If (!FuncCollision())
 {
+startTimerOnce++
+if (startTimerOnce = 1)
+{
+StartTime := A_TickCount
+}
 Last := "R"
 CanPlaceBlocks := 0
 ; Perform actions for pressing the Right arrow key
@@ -1013,6 +1169,7 @@ else
 Speed := 1
 CanPlaceBlocks := 1
 GuiControl, , Player, %TexturesFolder%Player.png
+}
 }
 }
 }
@@ -1038,6 +1195,29 @@ Loop, %BlocksInWidth%
 FixBugUnderStone++
 
 isBlock%FixBugUnderStone% := 1
+}
+
+if (YouWin != 1)
+{
+ElapsedTime := A_TickCount - StartTime
+
+
+ms := ElapsedTime
+
+; Calculate the components
+hours := Floor(ms / 3600000)
+ms := Mod(ms, 3600000)
+minutes := Floor(ms / 60000)
+ms := Mod(ms, 60000)
+seconds := Floor(ms / 1000)
+milliseconds := Mod(ms, 1000)
+
+; Display the result
+ElapsedTime123 := ""
+ElapsedTime123 .= hours "h " minutes "m " seconds "s " milliseconds "ms"
+
+GuiControl, 2:, TimerRunningInInventory, Time: %ElapsedTime123%
+GuiControl, 3:, TimerRunningInCraftingTable, Time: %ElapsedTime123%
 }
 
 Return
@@ -1082,6 +1262,7 @@ if (GuiInventory = 1)
 {
 Return
 }
+gameStarted := 0
 ;MsgBox, hi
 MouseGetPos, xpos, ypos
 XCoordinate := xpos - 5  ; Replace with the desired X coordinate
@@ -1091,6 +1272,7 @@ MouseBorder := BlockWidth * BlocksInWidth
 
 if (XCoordinate >= MouseBorder)
 {
+gameStarted := 1
 return
 }
 
@@ -1100,7 +1282,6 @@ Row := (YCoordinate // BlockHeight) + 1
 BlocksInWidth := BorderWidth // BlockWidth
 
 BlockNumber := (Row - 1) * BlocksInWidth + Col
-BlockNumber := Floor(BlockNumber)
 ;MsgBox, Block at X: %XCoordinate%, Y: %YCoordinate% is block number %BlockNumber% within the grid.
 
 
@@ -1114,6 +1295,7 @@ if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0
 {
 if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
 {
+gameStarted := 1
 return
 }
 }
@@ -1122,6 +1304,7 @@ if !(BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 0
 {
 if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockDown% = 0)
 {
+gameStarted := 1
 return
 }
 }
@@ -1130,6 +1313,7 @@ if !(BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0
 {
 if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockLeft% = 0)
 {
+gameStarted := 1
 return
 }
 }
@@ -1139,6 +1323,7 @@ if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0
 {
 if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0)
 {
+gameStarted := 1
 return
 }
 }
@@ -1149,6 +1334,7 @@ if (BlockUp <= 0) && !(BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
 if (isBlock%BlockDown% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockLeft% = 0)
 {
+gameStarted := 1
 return
 }
 }
@@ -1157,6 +1343,7 @@ if !(BlockUp <= 0) && (BlockDown <= 0) && (BlockLeft <= 0) && !(BlockRight <= 0)
 {
 if (isBlock%BlockUp% = 1) && (isBlock%BlockRight% = 1) && (isBlock%BlockDown% = 0) && (isBlock%BlockLeft% = 0)
 {
+gameStarted := 1
 return
 }
 }
@@ -1165,6 +1352,7 @@ if (!BlockUp <= 0) && (BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
 if (isBlock%BlockUp% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0) && (isBlock%BlockDown% = 0)
 {
+gameStarted := 1
 return
 }
 }
@@ -1174,6 +1362,7 @@ if (BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && (BlockRight <= 0)
 {
 if (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 0)
 {
+gameStarted := 1
 return
 }
 }
@@ -1183,6 +1372,7 @@ if !(BlockUp <= 0) && !(BlockDown <= 0) && !(BlockLeft <= 0) && !(BlockRight <= 
 {
 if (isBlock%BlockUp% = 1) && (isBlock%BlockDown% = 1) && (isBlock%BlockLeft% = 1) && (isBlock%BlockRight% = 1)
 {
+gameStarted := 1
 return
 }
 }
@@ -1204,6 +1394,7 @@ if (XCoordinate >= x1 && XCoordinate <= x2 && YCoordinate >= y1 && YCoordinate <
 else
 {
 ;MsgBox, The target coordinates are outside the player's rectangle.
+gameStarted := 1
 return
 }
 
@@ -1218,45 +1409,422 @@ didWeMineTheBlock := 0
 Loop, %availableBlocks%
 {
 
-if (typeOfBlock%BlockNumber% = availableBlockName%A_Index%)
-{
+
 funcGetBlockCount()
 itemInfo(0)
 
 
+
+numForGivingBlock := 0
 if (typeOfBlock%BlockNumber% = availableBlockName1) ; start STONE stone stone stone stone
 {
-if (SelectedBlock = "wooden_pickaxe")
+if (SelectedBlock = "wooden_pickaxe") && (availableBlock9 >= 1)
 {
 isPlayerCanMine := 0
 Sleep, 500
 GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_stone.png
 Sleep, 500
 didWeMineTheBlock++
+numForGivingBlock := 1
 isPlayerCanMine := 1
 }
-else if (SelectedBlock = "stone_pickaxe")
+else if (SelectedBlock = "stone_pickaxe") && (availableBlock10 >= 1)
 {
 isPlayerCanMine := 0
 Sleep, 250
 GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_stone.png
 Sleep, 250
 didWeMineTheBlock++
+numForGivingBlock := 1
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "iron_pickaxe") && (availableBlock11 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 100
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_stone.png
+Sleep, 100
+didWeMineTheBlock++
+numForGivingBlock := 1
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "diamond_pickaxe") && (availableBlock12 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 10
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_stone.png
+Sleep, 10
+didWeMineTheBlock++
+numForGivingBlock := 1
 isPlayerCanMine := 1
 }
 else
 {
+gameStarted := 1
 return
+}
 }
 ;;;;;;;;;; end of stone stone stone stone
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName16) ; start iron
+{
+if (SelectedBlock = "wooden_pickaxe") && (availableBlock9 >= 1)
+{
+gameStarted := 1
+return
+}
+else if (SelectedBlock = "stone_pickaxe") && (availableBlock10 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 350
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_iron.png
+Sleep, 350
+didWeMineTheBlock++
+numForGivingBlock := 16
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "iron_pickaxe") && (availableBlock11 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 200
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_iron.png
+Sleep, 200
+didWeMineTheBlock++
+numForGivingBlock := 16
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "diamond_pickaxe") && (availableBlock12 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 69
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_iron.png
+Sleep, 69
+didWeMineTheBlock++
+numForGivingBlock := 16
+isPlayerCanMine := 1
 }
 else
 {
+gameStarted := 1
+return
+}
+}
+;;;;;;;;;; end of iron
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName17) ; start diamond
+{
+if (SelectedBlock = "wooden_pickaxe") && (availableBlock9 >= 1)
+{
+gameStarted := 1
+return
+}
+else if (SelectedBlock = "stone_pickaxe") && (availableBlock10 >= 1)
+{
+gameStarted := 1
+return
+}
+else if (SelectedBlock = "iron_pickaxe") && (availableBlock11 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_diamond.png
+Sleep, 250
 didWeMineTheBlock++
+numForGivingBlock := 17
 isPlayerCanMine := 1
 }
+else if (SelectedBlock = "diamond_pickaxe") && (availableBlock12 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 100
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_diamond.png
+Sleep, 100
+didWeMineTheBlock++
+numForGivingBlock := 17
+isPlayerCanMine := 1
+}
+else
+{
+gameStarted := 1
+return
+}
+}
+;;;;;;;;;; end of diamond
+
+
+
+
+
+
+
+
+
+
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName18) ; start diamond_block
+{
+if (SelectedBlock = "wooden_pickaxe") && (availableBlock9 >= 1)
+{
+gameStarted := 1
+return
+}
+else if (SelectedBlock = "stone_pickaxe") && (availableBlock10 >= 1)
+{
+gameStarted := 1
+return
+}
+else if (SelectedBlock = "iron_pickaxe") && (availableBlock11 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_diamond_block.png
+Sleep, 250
+didWeMineTheBlock++
+numForGivingBlock := 18
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "diamond_pickaxe") && (availableBlock12 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 100
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_diamond_block.png
+Sleep, 100
+didWeMineTheBlock++
+numForGivingBlock := 18
+isPlayerCanMine := 1
+}
+else
+{
+gameStarted := 1
+return
+}
+}
+;;;;;;;;;; end of diamond_block
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName2) ; start grass
+{
+if (SelectedBlock = "wooden_shovel") && (availableBlock13 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_grass.png
+Sleep, 250
+didWeMineTheBlock++
+numForGivingBlock := 2
+isPlayerCanMine := 1
+}
+else
+{
+isPlayerCanMine := 0
+Sleep, 500
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_grass.png
+Sleep, 500
+didWeMineTheBlock++
+numForGivingBlock := 2
+isPlayerCanMine := 1
+}
+}
+;;;;;;;;;; end of grass
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName3) ; start dirt
+{
+if (SelectedBlock = "wooden_shovel") && (availableBlock13 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_dirt.png
+Sleep, 250
+didWeMineTheBlock++
+numForGivingBlock := 3
+isPlayerCanMine := 1
+}
+else
+{
+isPlayerCanMine := 0
+Sleep, 500
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_dirt.png
+Sleep, 500
+didWeMineTheBlock++
+numForGivingBlock := 3
+isPlayerCanMine := 1
+}
+}
+;;;;;;;;;; end of dirt
+
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName4) ; start log
+{
+if (SelectedBlock = "wooden_axe") && (availableBlock14 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_log.png
+Sleep, 250
+didWeMineTheBlock++
+numForGivingBlock := 4
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "stone_axe") && (availableBlock15 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 100
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_log.png
+Sleep, 100
+didWeMineTheBlock++
+numForGivingBlock := 4
+isPlayerCanMine := 1
+}
+else
+{
+isPlayerCanMine := 0
+Sleep, 500
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_log.png
+Sleep, 500
+didWeMineTheBlock++
+numForGivingBlock := 4
+isPlayerCanMine := 1
+}
+}
+;;;;;;;;;; end of log
+
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName6) ; start plank
+{
+if (SelectedBlock = "wooden_axe") && (availableBlock14 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_plank.png
+Sleep, 250
+didWeMineTheBlock++
+numForGivingBlock := 6
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "stone_axe") && (availableBlock15 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 100
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_plank.png
+Sleep, 100
+didWeMineTheBlock++
+numForGivingBlock := 6
+isPlayerCanMine := 1
+}
+else
+{
+isPlayerCanMine := 0
+Sleep, 500
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_plank.png
+Sleep, 500
+didWeMineTheBlock++
+numForGivingBlock := 6
+isPlayerCanMine := 1
+}
+}
+;;;;;;;;;; end of plank
+
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName8) ; start crafing_table
+{
+if (SelectedBlock = "wooden_axe") && (availableBlock14 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 250
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_crafting_table.png
+Sleep, 250
+didWeMineTheBlock++
+numForGivingBlock := 8
+isPlayerCanMine := 1
+}
+else if (SelectedBlock = "stone_axe") && (availableBlock15 >= 1)
+{
+isPlayerCanMine := 0
+Sleep, 100
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_crafting_table.png
+Sleep, 100
+didWeMineTheBlock++
+numForGivingBlock := 8
+isPlayerCanMine := 1
+}
+else
+{
+isPlayerCanMine := 0
+Sleep, 500
+GuiControl, , Block%BlockNumber%, %TexturesFolder%breaking_crafting_table.png
+Sleep, 500
+didWeMineTheBlock++
+numForGivingBlock := 8
+isPlayerCanMine := 1
+}
+}
+;;;;;;;;;; end of crafing_table
+
+
+if (typeOfBlock%BlockNumber% = availableBlockName5) ; start leaf
+{
+isPlayerCanMine := 0
+didWeMineTheBlock++
+numForGivingBlock := 5
+isPlayerCanMine := 1
+}
+;;;;;;;;;; end of leaf
+
+
+
+
 typeOfBlock%BlockNumber% := "air"
 funcGetBlockCount()
 itemInfo(0)
@@ -1264,28 +1832,28 @@ isBlock%BlockNumber% := 0
 funcGetBlockCount()
 itemInfo(0)
 GuiControl, Hide, Block%BlockNumber%
+gameStarted := 1
 if (didWeMineTheBlock >= 1)
 {
-availableBlock%A_Index%++
+availableBlock%numForGivingBlock%++
 funcGetBlockCount()
 itemInfo(0)
-}
+gameStarted := 1
 return
 }
 
 } ; end of loop
-
-
-
-
+gameStarted := 1
 }
 else
 {
+gameStarted := 1
 return
 }
+gameStarted := 1
 ;GuiControl, , Inventory, Stone: %stone% Dirt: %dirt% Grass Block: %grass%
 
-
+gameStarted := 1
 Return
 
 
@@ -1502,6 +2070,21 @@ else
 
 ; items cant be placed
 ;;;;;;;;;;;;;;;;;;;;;;;; start
+
+; see here
+; cant place those unless you wnat to go ahead and remove this condition
+
+;~ 7 := stick
+;~ 9 := wooden_pickaxe
+;~ 10 := stone_pickaxe
+;~ 11 := iron_pickaxe
+;~ 12 := diamond_pickaxe
+;~ 13 := wooden_shovel
+;~ 14 := wooden_axe
+;~ 15 := stone_axe
+;~ 16 := iron
+;~ 17 := diamond
+
 ; stick
 if (A_Index = 7) ; cant place stick unless you wnat to go ahead and remove this condition
 {
@@ -1522,7 +2105,36 @@ if (A_Index = 10) ; cant place stone_pickaxe unless you wnat to go ahead and rem
 {
 return
 }
-; 10 is the num for a stone_pickaxe
+; and so on
+if (A_Index = 11)
+{
+return
+}
+if (A_Index = 12)
+{
+return
+}
+if (A_Index = 13)
+{
+return
+}
+if (A_Index = 14)
+{
+return
+}
+if (A_Index = 15)
+{
+return
+}
+if (A_Index = 16)
+{
+return
+}
+if (A_Index = 17)
+{
+return
+}
+
 ;;;;;;;;;;;;;;;;;;;;;;;; end
 
 itemInfo(0)
@@ -1534,7 +2146,37 @@ typeOfBlock%BlockNumber% := availableBlockName%A_Index%
 isBlock%BlockNumber% := 1
 funcGetBlockCount()
 itemInfo(0)
+if (youCanOnlyWinOnce !>= 1)
+{
+if (A_Index = 18)
+{
+youCanOnlyWinOnce++
+YouWin := 1
+ElapsedTime := A_TickCount - StartTime
+
+
+ms := ElapsedTime
+
+; Calculate the components
+hours := Floor(ms / 3600000)
+ms := Mod(ms, 3600000)
+minutes := Floor(ms / 60000)
+ms := Mod(ms, 60000)
+seconds := Floor(ms / 1000)
+milliseconds := Mod(ms, 1000)
+
+; Display the result
+ElapsedTime123 := ""
+ElapsedTime123 .= hours "h " minutes "m " seconds "s " milliseconds "ms"
+GuiControl, 2:, TimerRunningInInventory, Time: %ElapsedTime123%
+GuiControl, 3:, TimerRunningInCraftingTable, Time: %ElapsedTime123%
+MsgBox, You Win!!!`nTime: %ElapsedTime123%
+FileAppend, Time: %ElapsedTime123%`n, Your Times.txt
+}
 return
+}
+
+
 }
 
 }
@@ -2156,6 +2798,68 @@ if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1)
 {
 inventoryCrafingRecipe5 := 1
 }
+;;;;;;;;;;;;;; 6
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "iron") && (forInInventoryCrafingTableName2 = "iron") && (forInInventoryCrafingTableName3 = "iron") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock16 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe6 := 1
+}
+;;;;;;;;;;;;;; 7
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "diamond") && (forInInventoryCrafingTableName2 = "diamond") && (forInInventoryCrafingTableName3 = "diamond") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock17 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe7 := 1
+}
+;;;;;;;;;;;;;; 8
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 1) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "stick") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "stick") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 1) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe8 := 1
+}
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 1) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe8 := 1
+}
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 0) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 0) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "") && (forInInventoryCrafingTableName6 = "stick") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "stick") && (availableBlock6 >= 1) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe8 := 1
+}
+;;;;;;;;;;;;;; 9
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 1) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "stick") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "stick") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe9 := 1
+}
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "plank") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe9 := 1
+}
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "plank") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "plank") && (forInInventoryCrafingTableName6 = "stick") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "stick") && (availableBlock6 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe9 := 1
+}
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "plank") && (forInInventoryCrafingTableName2 = "plank") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "plank") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock6 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe9 := 1
+}
+;;;;;;;;;;;;;; 10
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 1) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "stone") && (forInInventoryCrafingTableName2 = "stone") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "stick") && (forInInventoryCrafingTableName5 = "stone") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "stick") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "") && (availableBlock1 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe10:= 1
+}
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "stone") && (forInInventoryCrafingTableName3 = "stone") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "stone") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock1 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe10 := 1
+}
+if  (forInInventoryCrafingTablePos1 = 0) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 0) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 0) && (forInInventoryCrafingTablePos9 = 1) && (forInInventoryCrafingTableName1 = "") && (forInInventoryCrafingTableName2 = "stone") && (forInInventoryCrafingTableName3 = "stone") && (forInInventoryCrafingTableName4 = "") && (forInInventoryCrafingTableName5 = "stone") && (forInInventoryCrafingTableName6 = "stick") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "") && (forInInventoryCrafingTableName9 = "stick") && (availableBlock1 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe10 := 1
+}
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 0) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 0) && (forInInventoryCrafingTablePos7 = 0) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 0) && (forInInventoryCrafingTableName1 = "stone") && (forInInventoryCrafingTableName2 = "stone") && (forInInventoryCrafingTableName3 = "") && (forInInventoryCrafingTableName4 = "stone") && (forInInventoryCrafingTableName5 = "stick") && (forInInventoryCrafingTableName6 = "") && (forInInventoryCrafingTableName7 = "") && (forInInventoryCrafingTableName8 = "stick") && (forInInventoryCrafingTableName9 = "") && (availableBlock1 >= 3) && (availableBlock7 >= 2)
+{
+inventoryCrafingRecipe10 := 1
+}
+;;;;;;;;;;;;;; 11
+if  (forInInventoryCrafingTablePos1 = 1) && (forInInventoryCrafingTablePos2 = 1) && (forInInventoryCrafingTablePos3 = 1) && (forInInventoryCrafingTablePos4 = 1) && (forInInventoryCrafingTablePos5 = 1) && (forInInventoryCrafingTablePos6 = 1) && (forInInventoryCrafingTablePos7 = 1) && (forInInventoryCrafingTablePos8 = 1) && (forInInventoryCrafingTablePos9 = 1) && (forInInventoryCrafingTableName1 = "diamond") && (forInInventoryCrafingTableName2 = "diamond") && (forInInventoryCrafingTableName3 = "diamond") && (forInInventoryCrafingTableName4 = "diamond") && (forInInventoryCrafingTableName5 = "diamond") && (forInInventoryCrafingTableName6 = "diamond") && (forInInventoryCrafingTableName7 = "diamond") && (forInInventoryCrafingTableName8 = "diamond") && (forInInventoryCrafingTableName9 = "diamond") && (availableBlock17 >= 9)
+{
+inventoryCrafingRecipe11 := 1
+}
 ;;;;;;;;;;;;;;
 
 
@@ -2190,6 +2894,42 @@ else if (inventoryCrafingRecipe5 = 1)
 {
 weCraftedInTheInventory := "stone_pickaxe"
 GuiControl, , Item28, Assets/Textures/stone_pickaxe_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe6 = 1)
+{
+weCraftedInTheInventory := "iron_pickaxe"
+GuiControl, , Item28, Assets/Textures/iron_pickaxe_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe7 = 1)
+{
+weCraftedInTheInventory := "diamond_pickaxe"
+GuiControl, , Item28, Assets/Textures/diamond_pickaxe_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe8 = 1)
+{
+weCraftedInTheInventory := "wooden_shovel"
+GuiControl, , Item28, Assets/Textures/wooden_shovel_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe9 = 1)
+{
+weCraftedInTheInventory := "wooden_axe"
+GuiControl, , Item28, Assets/Textures/wooden_axe_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe10 = 1)
+{
+weCraftedInTheInventory := "stone_axe"
+GuiControl, , Item28, Assets/Textures/stone_axe_item.png
+getBlockFormDoneCraftingInInventory := 1
+}
+else if (inventoryCrafingRecipe11 = 1)
+{
+weCraftedInTheInventory := "diamond_block"
+GuiControl, , Item28, Assets/Textures/diamond_block_item.png
 getBlockFormDoneCraftingInInventory := 1
 }
 else
@@ -2278,6 +3018,88 @@ itemInfo(1)
 weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
 }
 
+if (weCraftedInTheInventory = "iron_pickaxe")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock11 := availableBlock11 + 1 ; availableBlock11 is iron_pickaxe + 1
+availableBlock7 := availableBlock7 - 2 ; availableBlock7 is sticks - 2
+availableBlock16 := availableBlock16 - 3 ; availableBlock16 is iron - 3
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "diamond_pickaxe")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock12 := availableBlock12 + 1 ; availableBlock12 is diamond_pickaxe + 1
+availableBlock7 := availableBlock7 - 2 ; availableBlock7 is sticks - 2
+availableBlock17 := availableBlock17 - 3 ; availableBlock17 is diamond - 3
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "wooden_shovel")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock13 := availableBlock13 + 1 ; availableBlock13 is wooden_shovel + 1
+availableBlock7 := availableBlock7 - 2 ; availableBlock7 is sticks - 2
+availableBlock6 := availableBlock6 - 1 ; availableBlock6 is plnak - 1
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "wooden_axe")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock14 := availableBlock14 + 1 ; availableBlock14 is wooden_axe + 1
+availableBlock7 := availableBlock7 - 2 ; availableBlock7 is sticks - 2
+availableBlock6 := availableBlock6 - 3 ; availableBlock6 is plnak - 3
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "stone_axe")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock15 := availableBlock15 + 1 ; availableBlock14 is stone_axe + 1
+availableBlock7 := availableBlock7 - 2 ; availableBlock7 is sticks - 2
+availableBlock1 := availableBlock1 - 3 ; availableBlock1 is stone - 3
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
+
+if (weCraftedInTheInventory = "diamond_block")
+{
+getBlockFormDoneCraftingInInventory := 0
+funcGetBlockCount()
+itemInfo(1)
+availableBlock18 := availableBlock18 + 1 ; availableBlock18 is diamond_block + 1
+availableBlock17 := availableBlock17 - 9 ; availableBlock17 is diamond - 9
+itemInfo(1)
+funcGetBlockCount()
+itemInfo(1)
+weCanPlaceBlockInCraftingInventory := 0 ; and here is yeah you know
+}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Loop, 18

@@ -17,3 +17,4 @@ The duration of that session between 9:50 AM and 11:28 AM is 1 hours 38 minutes 
 The duration of that session between 4:43 PM and 6:23 PM is 3 hours 0 minutes 13 seconds and 640 ms.
 The duration of that session between 11:53 AM and 1:29 PM is 1 hours 35 minutes 34 seconds and 453 ms.
 The duration of that session between 4:11 PM and 4:11 PM is 1 hours 25 minutes 3 seconds and 390 ms.
+The duration of that session between 6:06 PM and 8:02 PM is 1 hours 56 minutes 1 seconds and 407 ms.
